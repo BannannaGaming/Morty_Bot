@@ -1,6 +1,7 @@
 import discord
 import os
 import json
+from time import sleep
 
 # https://gist.github.com/hzsweers/8595628
 # Get env variable(s) from Heroku
@@ -31,6 +32,7 @@ async def on_message(message):
             to_send = "!add https://www.youtube.com/watch?v={}".format(video_id)
             print("Sending {}".format(to_send))
             await client.send_message(message.channel, to_send)
+            sleep(4)
 
         ###
         msg = outgoing.format("Done!")
