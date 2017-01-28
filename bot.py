@@ -1,0 +1,43 @@
+import discord
+import os
+import json
+
+# https://gist.github.com/hzsweers/8595628
+# Get env variable(s) from Heroku
+discord_token = os.environ["morty_discord_token"]
+api_key = os.environ["yt_key"]
+client = discord.Client()
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:  # Don't reply to self
+        return
+    else:
+        user = "{0.author.mention}".format(message)  # Get user mention
+
+    if message.content.startswith("!playlist"):
+        playlist_link = message.content.split(" ")[1]
+        print("{} asked for !playlist {}".format(user, playlist_link))
+        ###
+
+        playlist_id = playlist_link.split("list=")[1]
+        req = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={}&fields=items%2Fsnippet%2FresourceId%2FvideoId&key={}".format(playlist_id, api_key)
+
+        info = requests.get(req)
+        ids = json.loads(info.text)
+
+        for snippet in ids["items"]:
+            video_id = snippet["snippet"]["resourceId"]["videoId"]
+            to_send = "!add https://www.youtube.com/watch?v={}".format(video_id)
+            print("Sending {}".format(to_send))
+            await client.send_message(message.channel, to_send)
+
+        ###
+        msg = outgoing.format("Done!")
+        await client.send_message(message.channel, to_send)
+
+@client.event
+async def on_ready():
+    print("Logged in as\n{}\n{}\n------".format(client.user.name, client.user.id))
+
+client.run(discord_token)
