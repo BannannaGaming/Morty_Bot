@@ -36,7 +36,7 @@ async def on_message(message):
             # ids = json.loads(info.text)
 
             async with aiohttp.get(req) as info:
-                ids = await json.loads(info.text)
+                ids = await json.loads(info.text())
 
             sleep(5)
             for snippet in ids["items"]:
@@ -64,7 +64,7 @@ async def on_message(message):
         elif message.content.startswith("!help"):
             await client.send_message(message.channel, "Commands: !playlist, !coinflip, !roll, !choice")
 
-    except (IndexError, ValueError, NameError):
+    except (IndexError, ValueError, NameError, TypeError):
         print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
 
