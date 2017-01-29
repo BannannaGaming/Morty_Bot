@@ -31,16 +31,15 @@ async def on_message(message):
         info = requests.get(req)
         ids = json.loads(info.text)
 
+        sleep(5)
         for snippet in ids["items"]:
             video_id = snippet["snippet"]["resourceId"]["videoId"]
             to_send = "!add https://www.youtube.com/watch?v={}".format(video_id)
             print("Sending {}".format(to_send))
             await client.send_message(message.channel, to_send)
-            sleep(4)
+            sleep(10)
 
         ###
-        msg = outgoing.format("Done!")
-        await client.send_message(message.channel, to_send)
 
 @client.event
 async def on_ready():
