@@ -3,7 +3,6 @@ import requests
 import aiohttp
 import discord
 import random
-import json
 import os
 
 # Add to server
@@ -36,8 +35,7 @@ async def on_message(message):
             # ids = json.loads(info.text)
 
             async with aiohttp.get(req) as info:
-                j_raw = await info.json()
-                ids = json.loads(j_raw)
+                ids = await info.json()
 
             sleep(5)
             for snippet in ids["items"]:
