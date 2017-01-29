@@ -14,6 +14,8 @@ discord_token = os.environ["morty_discord_token"]
 api_key = os.environ["yt_key"]
 client = discord.Client()
 
+to_send = ""
+
 # Multi-line code block
 info_text = """
 ```
@@ -26,8 +28,18 @@ Platform       : {}
            discord.__version__,
            platform.system())
 
+def add_to_playlist(req):
+    global to_send
+    async with aiohttp.get(req) as info:
+        ids = await info.json()
+
+    for snippet in ids["items"]:
+        video_id = snippet["snippet"]["resourceId"]["videoId"]
+        to_send += "!add https://www.youtube.com/watch?v={}\n".format(video_id)
+
 @client.event
 async def on_message(message):
+    global to_send
     if message.author == client.user:  # Don't reply to self
         return
     else:
@@ -41,26 +53,14 @@ async def on_message(message):
             print("{} asked for !playlist {}".format(user, playlist_link))  # Needed so I can see if a (large) playlist caused it to break
 
             playlist_id = playlist_link.split("list=")[1]
-            req = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={}&fields=items%2Fsnippet%2FresourceId%2FvideoId&key={}".format(playlist_id, api_key)
-            # get webpage/json using "good" async method
-            async with aiohttp.get(req) as info:
-                ids = await info.json()
+            add_to_playlist("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={}&fields=items%2Fsnippet%2FresourceId%2FvideoId&key={}".format(playlist_id, api_key))
 
-            for snippet in ids["items"]:
-                video_id = snippet["snippet"]["resourceId"]["videoId"]
-                to_send += "!add https://www.youtube.com/watch?v={}\n".format(video_id)
-
-            while ids["nextPageToken"]:
+            try:
                 nextpagetoken = ids["nextPageToken"]
+                add_to_playlist("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&pageToken={}&playlistId={}&fields=items%2Fsnippet%2FresourceId%2FvideoId&key={}".format(nextpagetoken, playlist_id, api_key))
 
-                req = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&pageToken={}&playlistId={}&fields=items%2Fsnippet%2FresourceId%2FvideoId&key={}".format(nextpagetoken, playlist_id, api_key)
-
-                async with aiohttp.get(req) as info:
-                    ids = await info.json()
-
-                for snippet in ids["items"]:
-                    video_id = snippet["snippet"]["resourceId"]["videoId"]
-                    to_send += "!add https://www.youtube.com/watch?v={}\n".format(video_id)
+            except KeyError:
+                    pass  # No next page
 
             to_send += "```"  # Code block text so link thumbnails don't appear
             await client.send_message(message.channel, to_send)
