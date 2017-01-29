@@ -71,7 +71,6 @@ async def on_message(message):
     try:
         if message.content.startswith("!playlist"):
             await client.send_message(message.channel, "Getting links...\nCopy each line and send it again to get mee6 to add it:")
-            await client.send_typing(message.channel())
 
             playlist_link = message.content.split(" ")[1]
             print("{} asked for !playlist {}".format(user, playlist_link))  # Needed so I can see if a (large) playlist caused it to break
@@ -118,7 +117,6 @@ async def on_message(message):
             await client.send_message(message.channel, "I agree, :regional_indicator_k: :regional_indicator_y: :regional_indicator_s:")
 
         elif message.content.startswith("!wiki"):
-            await client.send_typing(message.channel())
             search = message.content.split(" ", 1)[1]
             try:
                 page = wikipedia.page(search)
