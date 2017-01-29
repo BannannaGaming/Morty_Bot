@@ -23,10 +23,10 @@ req_with_token = "https://www.googleapis.com/youtube/v3/playlistItems?part=snipp
 
 help_message = """
 ***Commands***:
-**!playlist** | *Youtube playlist link*
+**!playlist** *Youtube playlist link*
 **!coinflip**
 **!roll**
-**!choice** | *Comma,Seperated,List,Of,Choices*
+**!choice** *Comma,Seperated,List,Of,Choices*
 **!quote**
 **!info**
 **!help**"""
