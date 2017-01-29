@@ -50,7 +50,7 @@ async def on_message(message):
 
         elif message.content.startswith("!roll"):
             die = random.randint(1, 6)
-            await client.send_message(message.channel, ":game_die: {} rolled {}".format(user, die))
+            await client.send_message(message.channel, "{} rolled {}".format(user, die))
 
         elif message.content.startswith("!choice"):
             choices = message.content.split(",")[1:]
@@ -67,6 +67,6 @@ async def on_message(message):
 @client.event
 async def on_ready():
     print("Logged in as\n{}\n{}\n------".format(client.user.name, client.user.id))
-    await client.change_status(game="with Rick <3")
+    await client.change_presence(game=discord.Game(name="with Rick <3"))
 
 client.run(discord_token)
