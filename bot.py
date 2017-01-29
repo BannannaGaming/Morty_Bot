@@ -24,7 +24,7 @@ req_with_token = "https://www.googleapis.com/youtube/v3/playlistItems?part=snipp
 
 help_message = """
 ***Commands***:
-**!playlist** *Youtube playlist link*
+**!makelist** *Youtube playlist link*
 **!coinflip**
 **!roll**
 **!choice** *Comma,Seperated,List,Of,Choices*
@@ -69,7 +69,7 @@ async def on_message(message):
         user = "{0.author.mention}".format(message)  # Get user mention
 
     try:
-        if message.content.startswith("!playlist"):
+        if message.content.startswith("!makelist"):
             await client.send_message(message.channel, "Getting links...\nCopy each line and send it again to get mee6 to add it:")
 
             playlist_link = message.content.split(" ")[1]
