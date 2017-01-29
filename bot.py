@@ -71,7 +71,7 @@ async def on_message(message):
         user = "{0.author.mention}".format(message)  # Get user mention
 
     try:
-        if message.content.startswith("!makelist"):
+        if message.content.startswith("!makelist "):
             await client.send_message(message.channel, "Getting links...\nCopy each line and send it again to get mee6 to add it:")
 
             playlist_link = message.content.split(" ")[1]
@@ -102,7 +102,7 @@ async def on_message(message):
             die = random.randint(1, 6)
             await client.send_message(message.channel, "{} rolled {}".format(user, die))
 
-        elif message.content.startswith("!choice"):
+        elif message.content.startswith("!choice "):
             choices_str = message.content.split(" ", 1)[1]
             choices = choices_str.split(",")
             choice = random.randint(0, len(choices)-1)
@@ -118,7 +118,7 @@ async def on_message(message):
         elif message.content.startswith("!kys"):
             await client.send_message(message.channel, "I agree, :regional_indicator_k: :regional_indicator_y: :regional_indicator_s:")
 
-        elif message.content.startswith("!wiki"):
+        elif message.content.startswith("!wiki "):
             search = message.content.split(" ", 1)[1]
             try:
                 page = wikipedia.page(search)
@@ -129,12 +129,15 @@ async def on_message(message):
             except wikipedia.exceptions.DisambiguationError:
                 await client.send_message(message.channel, "Multiple results found, try something else")
 
-        elif message.content.startswith("!imgurlinks"):
+        elif message.content.startswith("!imgurlinks "):
             albumID = message.content.split(" ", 1)[1]
             links = "\n".join(get_links(albumID))
-            for album_links in [links[i:i + 1800] for i in range(0, len(links), 1800)]:
-                await client.send_message(message.channel, album_links)
-            await client.send_message(message.channel, "Finshed getting links")
+            if links != "Error":
+                for album_links in [links[i:i + 1800] for i in range(0, len(links), 1800)]:  # Split in to 1800 char chunks
+                    await client.send_message(message.channel, album_links)
+                await client.send_message(message.channel, "Finshed getting links")
+            else:
+                await client.send_message(message.channel, "Invalid album ID")
 
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
