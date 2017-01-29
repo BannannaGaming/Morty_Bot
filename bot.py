@@ -116,7 +116,7 @@ async def on_message(message):
         elif message.content.startswith("!kys"):
             await client.send_message(message.channel, "I agree, :regional_indicator_k: :regional_indicator_y: :regional_indicator_s:")
 
-        elif message.content.startswith("!wikipedia")
+        elif message.content.startswith("!wikipedia"):
             search = message.content.split(" ", 1)
             page = wikipedia.page(search)
             wiki_message = "`{}`\n\n```{}...```".format(page.title, page.content[:1000])
