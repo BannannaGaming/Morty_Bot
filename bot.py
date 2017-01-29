@@ -148,7 +148,7 @@ async def on_message(message):
             eq = message.content.split(" ", 1)[1]
             try:
                 solved = solve(eq)
-                await client.send_message(message.channel, "".join(solved))
+                await client.send_message(message.channel, str(solved))
             except (NameError, TypeError):
                 await client.send_message(message.channel, "Incorrectly formatted request")
 
