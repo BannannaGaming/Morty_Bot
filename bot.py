@@ -1,8 +1,8 @@
-import discord
-import os
-import json
-import requests
 from time import sleep
+import requests
+import discord
+import json
+import os
 
 # Add to server
 # https://discordapp.com/oauth2/authorize?client_id=275050313529032706&scope=bot&permissions=0
