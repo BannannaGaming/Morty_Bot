@@ -28,6 +28,7 @@ help_message = """
 **!roll**
 **!choice** *Comma,Seperated,List,Of,Choices*
 **!quote**
+**!kys**
 **!info**
 **!help**"""
 
@@ -109,6 +110,9 @@ async def on_message(message):
                 quotes = block_text.split("\n\n")
                 choice = random.randint(0, len(quotes)-1)
                 await client.send_message(message.channel, quotes[choice])
+
+        elif message.conetent.startswith("!kys"):
+            await client.send_message(message.channel, "I agree, :regional_indicator_k: :regional_indicator_y: :regional_indicator_s:")
 
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
