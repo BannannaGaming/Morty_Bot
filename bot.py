@@ -111,7 +111,7 @@ async def on_message(message):
                 choice = random.randint(0, len(quotes)-1)
                 await client.send_message(message.channel, quotes[choice])
 
-        elif message.conetent.startswith("!kys"):
+        elif message.content.startswith("!kys"):
             await client.send_message(message.channel, "I agree, :regional_indicator_k: :regional_indicator_y: :regional_indicator_s:")
 
         elif message.content.startswith("!info"):
