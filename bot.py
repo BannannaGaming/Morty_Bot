@@ -1,5 +1,6 @@
 from imgur_album_link_xtractor import get_links
 from platform import python_version
+from sympy import *
 import wikipedia
 import platform
 import aiohttp
@@ -20,6 +21,9 @@ client = discord.Client()
 to_send = ""
 ids = ""
 
+# sympy math things
+x, y, a, b, z = symbols("x y a b z")
+
 req_no_token = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=40&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}"
 req_with_token = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=40&pageToken={}&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}"
 
@@ -32,6 +36,7 @@ help_message = """
 **!quote**
 **!wiki** *page, such as "Donald Trump"*
 **!imgurlinks** *album ID*
+**!solve** *equation - must use x y a b z as symbols*
 **!kys**
 **!info**
 **!help**"""
@@ -138,6 +143,14 @@ async def on_message(message):
                 await client.send_message(message.channel, "Finshed getting links")
             else:
                 await client.send_message(message.channel, "Invalid album ID")
+
+        elif message.content.startswith("!solve "):
+            eq = message.content.split(" ", 1)[1]
+            try:
+                solved = solve(eq)
+                await client.send_message(message.channel, "".join(solved))
+            except (NameError, TypeError):
+                await client.send_message(message.channel, "Incorrectly formatted request")
 
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
