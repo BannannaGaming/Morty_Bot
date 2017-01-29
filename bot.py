@@ -28,10 +28,14 @@ Platform       : {}
            discord.__version__,
            platform.system())
 
-def add_to_playlist(req):
+def add_to_playlist(req, first=False):
     global to_send
+
     async with aiohttp.get(req) as info:
         ids = await info.json()
+
+    if first:
+        to_send += "Playlist ID: {}".format(ids["items"]["snippet"]["resourceId"]["playlistId"])
 
     for snippet in ids["items"]:
         video_id = snippet["snippet"]["resourceId"]["videoId"]
@@ -53,11 +57,11 @@ async def on_message(message):
             print("{} asked for !playlist {}".format(user, playlist_link))  # Needed so I can see if a (large) playlist caused it to break
 
             playlist_id = playlist_link.split("list=")[1]
-            add_to_playlist("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={}&fields=items%2Fsnippet%2FresourceId%2FvideoId&key={}".format(playlist_id, api_key))
+            add_to_playlist("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(playlist_id, api_key), True)
 
             try:
                 nextpagetoken = ids["nextPageToken"]
-                add_to_playlist("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&pageToken={}&playlistId={}&fields=items%2Fsnippet%2FresourceId%2FvideoId&key={}".format(nextpagetoken, playlist_id, api_key))
+                add_to_playlist("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&pageToken={}&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(nextpagetoken, playlist_id, api_key))
 
             except KeyError:
                     pass  # No next page
