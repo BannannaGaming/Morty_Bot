@@ -101,7 +101,7 @@ async def on_message(message):
             await client.send_message(message.channel, "{} rolled {}".format(user, die))
 
         elif message.content.startswith("!choice"):
-            choices_str = message.content.split(" ", 1)
+            choices_str = message.content.split(" ", 1)[1]
             choices = choices_str.split(",")
             choice = random.randint(0, len(choices)-1)
             await client.send_message(message.channel, "I choose: {}".format(choices[choice]))
@@ -117,7 +117,7 @@ async def on_message(message):
             await client.send_message(message.channel, "I agree, :regional_indicator_k: :regional_indicator_y: :regional_indicator_s:")
 
         elif message.content.startswith("!wikipedia"):
-            search = message.content.split(" ", 1)
+            search = message.content.split(" ", 1)[1]
 
             print("Wikipedia search for {}".format(search))
 
