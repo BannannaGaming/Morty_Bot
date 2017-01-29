@@ -26,7 +26,7 @@ async def on_message(message):
         to_send = ""
         playlist_link = message.content.split(" ")[1]
         print("{} asked for !playlist {}".format(user, playlist_link))
-        
+
         playlist_id = playlist_link.split("list=")[1]
         req = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={}&fields=items%2Fsnippet%2FresourceId%2FvideoId&key={}".format(playlist_id, api_key)
 
@@ -41,13 +41,15 @@ async def on_message(message):
         await client.send_message(message.channel, to_send)
 
     elif message.content.startswith("!coinflip"):
-        flip = random.radint(1, 2):
-            if flip = 1:
-                await client.send_message(message.channel, "Heads wins!")
-            else:
-                await client.send_message(message.channel, "Tails wins!")
+        print("{} asked for coinflip".format(user))
+        flip = random.radint(1, 2)
+        if flip = 1:
+            await client.send_message(message.channel, "Heads wins!")
+        else:
+            await client.send_message(message.channel, "Tails wins!")
 
-    elif message.content.startswith("!coinflip"):
+    elif message.content.startswith("!roll"):
+        print("{} asked for dice roll".format(user))
         die = random.randint(1, 6)
         await client.send_message(message.channel, "{} rolled {}".format(user, die))
 
