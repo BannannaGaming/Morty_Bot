@@ -29,7 +29,7 @@ help_message = """
 **!roll**
 **!choice** *Comma,Seperated,List,Of,Choices*
 **!quote**
-**!wikipedia** *page, such as "Donald Trump"*
+**!wiki** *page, such as "Donald Trump"*
 **!kys**
 **!info**
 **!help**"""
@@ -116,7 +116,7 @@ async def on_message(message):
         elif message.content.startswith("!kys"):
             await client.send_message(message.channel, "I agree, :regional_indicator_k: :regional_indicator_y: :regional_indicator_s:")
 
-        elif message.content.startswith("!wikipedia"):
+        elif message.content.startswith("!wiki"):
             search = message.content.split(" ", 1)[1]
 
             print("Wikipedia search for {}".format(search))
