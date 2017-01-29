@@ -24,7 +24,7 @@ async def on_message(message):
     try:
         if message.content.startswith("!playlist"):
             await client.send_message(message.channel, "Getting links...\nCopy each line and send it again to get mee6 to add it:")
-            to_send = ""
+            to_send = "```"
             playlist_link = message.content.split(" ")[1]
             print("{} asked for !playlist {}".format(user, playlist_link))  # Needed so I can see if a (large) playlist caused it to break
 
@@ -35,11 +35,11 @@ async def on_message(message):
             async with aiohttp.get(req) as info:
                 ids = await info.json()
 
-            sleep(5)
             for snippet in ids["items"]:
                 video_id = snippet["snippet"]["resourceId"]["videoId"]
                 to_send += "!add https://www.youtube.com/watch?v={}\n".format(video_id)
 
+            to_send += "```"
             await client.send_message(message.channel, to_send)
 
         elif message.content.startswith("!coinflip"):
@@ -60,7 +60,7 @@ async def on_message(message):
             await client.send_message(message.channel, "I choose: {}".format(choices[choice]))
 
         elif message.content.startswith("!help"):
-            await client.send_message(message.channel, "Commands: !playlist, !coinflip, !roll, !choice")
+            await client.send_message(message.channel, "*Commands*:\n**!playlist**\n**!coinflip**\n**!roll**\n**!choice**\n**!help**")
 
     except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
