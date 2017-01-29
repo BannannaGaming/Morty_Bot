@@ -30,7 +30,8 @@ Platform       : {}
            platform.system())
 
 async def add_to_playlist(req, first=False):
-    global to_send, ids
+    global ids
+    to_send = "```"
 
     async with aiohttp.get(req) as info:
         ids = await info.json()
@@ -41,6 +42,9 @@ async def add_to_playlist(req, first=False):
     for snippet in ids["items"]:
         video_id = snippet["snippet"]["resourceId"]["videoId"]
         to_send += "!add https://www.youtube.com/watch?v={}\n".format(video_id)
+
+    to_send += "```"  # Code block text so link thumbnails don't appear
+    await client.send_message(message.channel, to_send)
 
 @client.event
 async def on_message(message):
@@ -53,7 +57,7 @@ async def on_message(message):
     try:
         if message.content.startswith("!playlist"):
             await client.send_message(message.channel, "Getting links...\nCopy each line and send it again to get mee6 to add it:")
-            to_send = "```"
+
             playlist_link = message.content.split(" ")[1]
             print("{} asked for !playlist {}".format(user, playlist_link))  # Needed so I can see if a (large) playlist caused it to break
 
@@ -67,9 +71,8 @@ async def on_message(message):
 
             except KeyError:
                     pass  # No next page
-
-            to_send += "```"  # Code block text so link thumbnails don't appear
-            await client.send_message(message.channel, to_send)
+                    
+            await client.send_message(message.channel, "Finished retrieving playlist")
 
         elif message.content.startswith("!coinflip"):
             flip = random.randint(1, 2)
