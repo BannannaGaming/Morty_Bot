@@ -36,13 +36,13 @@ async def on_message(message):
         sleep(5)
         for snippet in ids["items"]:
             video_id = snippet["snippet"]["resourceId"]["videoId"]
-            to_send += "!add https://www.youtube.com/watch?v={}".format(video_id)
+            to_send += "!add https://www.youtube.com/watch?v={}\n".format(video_id)
 
         await client.send_message(message.channel, to_send)
 
     elif message.content.startswith("!coinflip"):
         print("{} asked for coinflip".format(user))
-        flip = random.radint(1, 2)
+        flip = random.randint(1, 2)
         if flip == 1:
             await client.send_message(message.channel, "Heads wins!")
         else:
