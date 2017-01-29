@@ -118,6 +118,9 @@ async def on_message(message):
 
         elif message.content.startswith("!wikipedia"):
             search = message.content.split(" ", 1)
+
+            print("Wikipedia search for {}".format(search))
+
             page = wikipedia.page(search)
             wiki_message = "`{}`\n\n```{}...```".format(page.title, page.content[:1000])
 
