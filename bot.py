@@ -36,7 +36,7 @@ async def add_to_playlist(channel, req, first=False):
     to_send = "```"
 
     async with aiohttp.get(req) as info:
-        ids = await info.json()send += "Playlist ID: {}".format(ids["items"]["snippet"]["resourceId"]["playlistId"])
+        ids = await info.json()
 
     for snippet in ids["items"]:
         video_id = snippet["snippet"]["resourceId"]["videoId"]
