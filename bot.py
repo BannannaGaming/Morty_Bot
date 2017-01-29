@@ -58,11 +58,12 @@ async def on_message(message):
             print("{} asked for !playlist {}".format(user, playlist_link))  # Needed so I can see if a (large) playlist caused it to break
 
             playlist_id = playlist_link.split("list=")[1]
-            await add_to_playlist("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(playlist_id, api_key), True)
+            await add_to_playlist("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(playlist_id, api_key), True)
 
             try:
                 nextpagetoken = ids["nextPageToken"]
-                await add_to_playlist("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&pageToken={}&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(nextpagetoken, playlist_id, api_key))
+                print("Next page", nextpagetoken)
+                await add_to_playlist("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&pageToken={}&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(nextpagetoken, playlist_id, api_key))
 
             except KeyError:
                     pass  # No next page
