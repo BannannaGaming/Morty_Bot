@@ -1,5 +1,6 @@
 from time import sleep
 import requests
+import aiohttp
 import discord
 import random
 import json
@@ -63,7 +64,7 @@ async def on_message(message):
         elif message.content.startswith("!help"):
             await client.send_message(message.channel, "Commands: !playlist, !coinflip, !roll, !choice")
 
-    except (IndexError,ValueError):
+    except (IndexError, ValueError, NameError):
         print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
 
