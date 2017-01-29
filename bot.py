@@ -118,10 +118,13 @@ async def on_message(message):
 
         elif message.content.startswith("!wiki"):
             search = message.content.split(" ", 1)[1]
-            page = wikipedia.page(search)
-            wiki_message = "`{}`\n\n```{}...```".format(page.title, page.content[:1000])
-            await client.send_message(message.channel, wiki_message)
-
+            try:
+                page = wikipedia.page(search)
+                wiki_message = "`{}`\n\n```{}...```".format(page.title, page.content[:1000])
+                await client.send_message(message.channel, wiki_message)
+            except wikipedia.exceptions.PageError:
+                await client.send_message(message.channel, "That does not match any Wikipedia pages")
+                
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
 
