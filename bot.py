@@ -1,4 +1,5 @@
 from platform import python_version
+import wikipedia
 import platform
 import aiohttp
 import discord
@@ -28,6 +29,7 @@ help_message = """
 **!roll**
 **!choice** *Comma,Seperated,List,Of,Choices*
 **!quote**
+**!wikipedia** *page, such as "Donald Trump"*
 **!kys**
 **!info**
 **!help**"""
@@ -99,7 +101,7 @@ async def on_message(message):
             await client.send_message(message.channel, "{} rolled {}".format(user, die))
 
         elif message.content.startswith("!choice"):
-            choices_str = message.content.split(" ", 1)[1]
+            choices_str = message.content.split(" ", 1)
             choices = choices_str.split(",")
             choice = random.randint(0, len(choices)-1)
             await client.send_message(message.channel, "I choose: {}".format(choices[choice]))
@@ -113,6 +115,11 @@ async def on_message(message):
 
         elif message.content.startswith("!kys"):
             await client.send_message(message.channel, "I agree, :regional_indicator_k: :regional_indicator_y: :regional_indicator_s:")
+
+        elif message.content.startswith("!wikipedia")
+            search = message.content.split(" ", 1)
+            page = wikipedia.page(search)
+            wiki_message = "`{}`\n\n```{}...```".format(page.title, page.content[:1000])
 
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
