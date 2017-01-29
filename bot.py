@@ -26,7 +26,7 @@ async def on_message(message):
             await client.send_message(message.channel, "Getting links...\nCopy each line and send it again to get mee6 to add it:")
             to_send = ""
             playlist_link = message.content.split(" ")[1]
-            print("{} asked for !playlist {}".format(user, playlist_link))
+            print("{} asked for !playlist {}".format(user, playlist_link))  # Needed so I can see if a (large) playlist caused it to break
 
             playlist_id = playlist_link.split("list=")[1]
             req = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={}&fields=items%2Fsnippet%2FresourceId%2FvideoId&key={}".format(playlist_id, api_key)
@@ -42,31 +42,31 @@ async def on_message(message):
             await client.send_message(message.channel, to_send)
 
         elif message.content.startswith("!coinflip"):
-            print("{} asked for coinflip".format(user))
             flip = random.randint(1, 2)
             if flip == 1:
-                await client.send_message(message.channel, "Heads wins!")
+                await client.send_message(message.channel, "Heads wins :ok_hand:")
             else:
-                await client.send_message(message.channel, "Tails wins!")
+                await client.send_message(message.channel, "Tails wins :ok_hand:")
 
         elif message.content.startswith("!roll"):
-            print("{} asked for dice roll".format(user))
             die = random.randint(1, 6)
-            await client.send_message(message.channel, "{} rolled {}".format(user, die))
+            await client.send_message(message.channel, ":game_die: {} rolled {}".format(user, die))
 
         elif message.content.startswith("!choice"):
             choices = message.content.split(",")[1:]
             choice = random.randint(0, len(choices)-1)
-            await client.send_message(message.channel, "I choose {}".format(choices[choice]))
+            await client.send_message(message.channel, "I choose: {}".format(choices[choice]))
 
         elif message.content.startswith("!help"):
             await client.send_message(message.channel, "Commands: !playlist, !coinflip, !roll, !choice")
-            
+
     except IndexError:
-        await client.send_message(message.channel, "Something went wrong :(")
+        print("Something went wrong :(")
+        await client.send_message(message.channel, "Something went wrong :cry:")
 
 @client.event
 async def on_ready():
     print("Logged in as\n{}\n{}\n------".format(client.user.name, client.user.id))
+    client.change_status(game="")
 
 client.run(discord_token)
