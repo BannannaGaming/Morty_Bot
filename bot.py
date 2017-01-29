@@ -30,7 +30,7 @@ Platform       : {}
            platform.system())
 
 #  Message passed in so message.channel get be
-async def add_to_playlist(channel, absreq, first=False):
+async def add_to_playlist(channel, req, first=False):
     global ids
     to_send = "```"
 
@@ -49,7 +49,6 @@ async def add_to_playlist(channel, absreq, first=False):
 
 @client.event
 async def on_message(message):
-    global to_send
     if message.author == client.user:  # Don't reply to self
         return
     else:
