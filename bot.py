@@ -29,7 +29,8 @@ Platform       : {}
            discord.__version__,
            platform.system())
 
-async def add_to_playlist(req, first=False):
+#  Message passed in so message.channel get be
+async def add_to_playlist(channel, absreq, first=False):
     global ids
     to_send = "```"
 
@@ -44,7 +45,7 @@ async def add_to_playlist(req, first=False):
         to_send += "!add https://www.youtube.com/watch?v={}\n".format(video_id)
 
     to_send += "```"  # Code block text so link thumbnails don't appear
-    await client.send_message(message.channel, to_send)
+    await client.send_message(channel, to_send)
 
 @client.event
 async def on_message(message):
@@ -62,16 +63,16 @@ async def on_message(message):
             print("{} asked for !playlist {}".format(user, playlist_link))  # Needed so I can see if a (large) playlist caused it to break
 
             playlist_id = playlist_link.split("list=")[1]
-            await add_to_playlist("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(playlist_id, api_key), True)
+            await add_to_playlist(message.channel, "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(playlist_id, api_key), True)
 
             try:
                 nextpagetoken = ids["nextPageToken"]
                 print("Next page", nextpagetoken)
-                await add_to_playlist("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&pageToken={}&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(nextpagetoken, playlist_id, api_key))
+                await add_to_playlist(message.channel, "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&pageToken={}&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(nextpagetoken, playlist_id, api_key))
 
             except KeyError:
                     pass  # No next page
-                    
+
             await client.send_message(message.channel, "Finished retrieving playlist")
 
         elif message.content.startswith("!coinflip"):
