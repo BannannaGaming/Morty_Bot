@@ -1,5 +1,5 @@
-from time import sleep
-import requests
+from platform import python_version
+import platform
 import aiohttp
 import discord
 import random
@@ -13,6 +13,18 @@ import os
 discord_token = os.environ["morty_discord_token"]
 api_key = os.environ["yt_key"]
 client = discord.Client()
+
+# Multi-line code block
+info_text = """
+```
+- - - - Info - - - -
+Python Version : {}
+API Version    : {}
+Platform       : {}
+```
+""".format(python_version(),
+           discord.__version__,
+           platform.system())
 
 @client.event
 async def on_message(message):
@@ -39,7 +51,7 @@ async def on_message(message):
                 video_id = snippet["snippet"]["resourceId"]["videoId"]
                 to_send += "!add https://www.youtube.com/watch?v={}\n".format(video_id)
 
-            to_send += "```"
+            to_send += "```"  # Code block text so link thumbnails don't appear
             await client.send_message(message.channel, to_send)
 
         elif message.content.startswith("!coinflip"):
@@ -61,6 +73,9 @@ async def on_message(message):
 
         elif message.content.startswith("!help"):
             await client.send_message(message.channel, "*Commands*:\n**!playlist**\n**!coinflip**\n**!roll**\n**!choice**\n**!help**")
+
+        elif message.content.startswith("!info"):
+            await client.send_message(message.channel, info_text)
 
     except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
