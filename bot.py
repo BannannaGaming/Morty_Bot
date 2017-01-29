@@ -3,6 +3,9 @@ import os
 import json
 from time import sleep
 
+# Add to server
+# https://discordapp.com/oauth2/authorize?client_id=275050313529032706&scope=bot&permissions=0
+
 # https://gist.github.com/hzsweers/8595628
 # Get env variable(s) from Heroku
 discord_token = os.environ["morty_discord_token"]
