@@ -64,13 +64,14 @@ async def on_message(message):
             playlist_id = playlist_link.split("list=")[1]
             await add_to_playlist(message.channel, "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(playlist_id, api_key), True)
 
-            try:
-                nextpagetoken = ids["nextPageToken"]
-                print("Next page", nextpagetoken)
-                await add_to_playlist(message.channel, "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&pageToken={}&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(nextpagetoken, playlist_id, api_key))
+            while 1:
+                try:
+                    nextpagetoken = ids["nextPageToken"]
+                    print("Next page", nextpagetoken)
+                    await add_to_playlist(message.channel, "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&pageToken={}&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(nextpagetoken, playlist_id, api_key))
 
-            except KeyError:
-                    pass  # No next page
+                except KeyError:
+                        break  # No next page
 
             await client.send_message(message.channel, "Finished retrieving playlist")
 
