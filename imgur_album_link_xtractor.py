@@ -1,4 +1,5 @@
 from imgurpython import ImgurClient
+from imgurpython import helpers
 import os
 
 client_id     = os.environ["imgr_id"]
@@ -13,5 +14,5 @@ def get_links(ID):
             lis.append(data)
         return lis
 
-    except imgurpython.helpers.error.ImgurClientError:
+    except helpers.error.ImgurClientError:
         return ["Error"]
