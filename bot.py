@@ -124,6 +124,8 @@ async def on_message(message):
                 await client.send_message(message.channel, wiki_message)
             except wikipedia.exceptions.PageError:
                 await client.send_message(message.channel, "That does not match any Wikipedia pages")
+            except wikipedia.exceptions.DisambiguationError:
+                await client.send_message(message.channel, "Multiple results found, try something else")
 
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
