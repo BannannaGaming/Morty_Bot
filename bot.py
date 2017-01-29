@@ -34,8 +34,8 @@ async def add_to_playlist(req, first=False):
     async with aiohttp.get(req) as info:
         ids = await info.json()
 
-    if first:
-        to_send += "Playlist ID: {}".format(ids["items"]["snippet"]["resourceId"]["playlistId"])
+    # if first:
+    #     to_send += "Playlist ID: {}".format(ids["items"]["snippet"]["resourceId"]["playlistId"])
 
     for snippet in ids["items"]:
         video_id = snippet["snippet"]["resourceId"]["videoId"]
