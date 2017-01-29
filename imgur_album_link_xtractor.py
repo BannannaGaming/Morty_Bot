@@ -1,4 +1,5 @@
 from imgurpython import ImgurClient
+import os
 
 client_id     = os.environ["imgr_id"]
 client_secret = os.environ["imgr_secret"]
