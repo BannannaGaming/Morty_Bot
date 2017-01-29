@@ -28,7 +28,7 @@ Platform       : {}
            discord.__version__,
            platform.system())
 
-def add_to_playlist(req, first=False):
+async def add_to_playlist(req, first=False):
     global to_send
 
     async with aiohttp.get(req) as info:
