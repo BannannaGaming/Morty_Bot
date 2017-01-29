@@ -21,6 +21,16 @@ ids = ""
 req_no_token = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=40&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}"
 req_with_token = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=40&pageToken={}&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}"
 
+help_message = """
+***Commands***:
+**!playlist** | *Youtube playlist link*
+**!coinflip**
+**!roll**
+**!choice** | *Comma,Seperated,List,Of,Choices*
+**!quote**
+**!info**
+**!help**"""
+
 # Multi-line code block
 info_text = """
 ```
@@ -95,7 +105,7 @@ async def on_message(message):
 
         elif message.content.startswith("!quote"):
             with open ("quotes.txt", "r") as f:
-                block_text = await f.read()
+                block_text = f.read()
                 quotes = block_text.split(" | ")
                 choice = random.randint(0, len(quotes)-1)
                 await client.send_message(message.channel, quotes[choice])
@@ -104,7 +114,7 @@ async def on_message(message):
             await client.send_message(message.channel, info_text)
 
         elif message.content.startswith("!help"):
-            await client.send_message(message.channel, "*Commands*:\n**!playlist**\n**!coinflip**\n**!roll**\n**!choice**\n**!quote**\n**!info**\n**!help**")
+            await client.send_message(message.channel, help_message)
 
     except EOFError:  # (ValueError, IndexError, NameError, TypeError)
         print("Something went wrong :(")
