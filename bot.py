@@ -43,7 +43,7 @@ async def on_message(message):
     elif message.content.startswith("!coinflip"):
         print("{} asked for coinflip".format(user))
         flip = random.radint(1, 2)
-        if flip = 1:
+        if flip == 1:
             await client.send_message(message.channel, "Heads wins!")
         else:
             await client.send_message(message.channel, "Tails wins!")
