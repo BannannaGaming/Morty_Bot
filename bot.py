@@ -31,8 +31,11 @@ async def on_message(message):
             playlist_id = playlist_link.split("list=")[1]
             req = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={}&fields=items%2Fsnippet%2FresourceId%2FvideoId&key={}".format(playlist_id, api_key)
 
-            info = requests.get(req)
-            ids = json.loads(info.text)
+            # info = requests.get(req)
+            # ids = json.loads(info.text)
+
+            async with aiohttp.get(req) as info:
+                ids = await json.loads(info.text)
 
             sleep(5)
             for snippet in ids["items"]:
@@ -60,7 +63,7 @@ async def on_message(message):
         elif message.content.startswith("!help"):
             await client.send_message(message.channel, "Commands: !playlist, !coinflip, !roll, !choice")
 
-    except IndexError:
+    except (IndexError,ValueError):
         print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
 
