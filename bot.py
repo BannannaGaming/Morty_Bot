@@ -36,7 +36,8 @@ async def on_message(message):
             # ids = json.loads(info.text)
 
             async with aiohttp.get(req) as info:
-                ids = await json.loads(info.text())
+                j_raw = await info.json()
+                ids = json.loads(j_raw)
 
             sleep(5)
             for snippet in ids["items"]:
