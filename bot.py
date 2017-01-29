@@ -92,7 +92,7 @@ async def on_message(message):
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
 
-    except (ValueError, IndexError, NameError, TypeError):
+    except EOFError:  # (ValueError, IndexError, NameError, TypeError)
         print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
 
