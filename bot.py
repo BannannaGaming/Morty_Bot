@@ -131,8 +131,10 @@ async def on_message(message):
 
         elif message.content.startswith("!imgurlinks"):
             albumID = message.content.split(" ", 1)[1]
-            links = get_links(albumID)
-            await client.send_message(message.channel, "\n".join(links))
+            links = "\n".join(get_links(albumID))
+            for album_links in [links[i:i + 2] for i in range(0, len(links), 2)]
+                await client.send_message(message.channel, album_links)
+            await client.send_message(message.channel, "Finshed getting links")
 
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
