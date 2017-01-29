@@ -1,11 +1,11 @@
 from imgurpython import ImgurClient
-from imgurpython import helpers
+from imgurpython import helpers  # For error handling
 import os
 
 client_id     = os.environ["imgr_id"]
 client_secret = os.environ["imgr_secret"]
 
-def get_links(ID):
+async def get_links(ID):
     client = ImgurClient(client_id, client_secret)
     lis = []
     try:

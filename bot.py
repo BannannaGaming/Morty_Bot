@@ -131,7 +131,7 @@ async def on_message(message):
 
         elif message.content.startswith("!imgurlinks "):
             albumID = message.content.split(" ", 1)[1]
-            links = "\n".join(get_links(albumID))
+            links = "\n".join(await get_links(albumID))
             if links != "Error":
                 for album_links in [links[i:i + 1800] for i in range(0, len(links), 1800)]:  # Split in to 1800 char chunks
                     await client.send_message(message.channel, album_links)
@@ -145,7 +145,7 @@ async def on_message(message):
         elif message.content.startswith("!help"):
             await client.send_message(message.channel, help_message)
 
-    except EOFError:  # (ValueError, IndexError, NameError, TypeError)
+    except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
 
