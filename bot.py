@@ -18,6 +18,9 @@ client = discord.Client()
 to_send = ""
 ids = ""
 
+req_no_token = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=40&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}"
+req_with_token = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=40&pageToken={}&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}"
+
 # Multi-line code block
 info_text = """
 ```
@@ -60,13 +63,13 @@ async def on_message(message):
             print("{} asked for !playlist {}".format(user, playlist_link))  # Needed so I can see if a (large) playlist caused it to break
 
             playlist_id = playlist_link.split("list=")[1]
-            await add_to_playlist(message.channel, "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=40&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(playlist_id, api_key), True)
+            await add_to_playlist(message.channel, req_no_token.format(playlist_id, api_key), True)
 
             while 1:
                 try:
                     nextpagetoken = ids["nextPageToken"]
                     print("Next page", nextpagetoken)
-                    await add_to_playlist(message.channel, "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=40&pageToken={}&playlistId={}&fields=items(snippet(resourceId(playlistId%2CvideoId)))%2CnextPageToken&key={}".format(nextpagetoken, playlist_id, api_key))
+                    await add_to_playlist(message.channel, req_with_token.format(nextpagetoken, playlist_id, api_key))
 
                 except KeyError:
                         break  # No next page
@@ -90,11 +93,18 @@ async def on_message(message):
             choice = random.randint(0, len(choices)-1)
             await client.send_message(message.channel, "I choose: {}".format(choices[choice]))
 
-        elif message.content.startswith("!help"):
-            await client.send_message(message.channel, "*Commands*:\n**!playlist**\n**!coinflip**\n**!roll**\n**!choice**\n**!help**")
+        elif message.content.startswith("!quote"):
+            with open ("quotes.txt", "r") as f:
+                block_text = await f.read()
+                quotes = block_text.split(" | ")
+                choice = random.randint(0, len(quotes)-1)
+                await client.send_message(message.channel, quotes[choice])
 
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
+
+        elif message.content.startswith("!help"):
+            await client.send_message(message.channel, "*Commands*:\n**!playlist**\n**!coinflip**\n**!roll**\n**!choice**\n**!quote**\n**!info**\n**!help**")
 
     except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
