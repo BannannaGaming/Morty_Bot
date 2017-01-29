@@ -54,7 +54,7 @@ async def on_message(message):
             await client.send_message(message.channel, "{} rolled {}".format(user, die))
 
         elif message.content.startswith("!choice"):
-            choices_str = message.content.split(" ", 1)[1:]
+            choices_str = message.content.split(" ", 1)[1]
             choices = choices_str.split(",")
             choice = random.randint(0, len(choices)-1)
             await client.send_message(message.channel, "I choose: {}".format(choices[choice]))
