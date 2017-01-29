@@ -106,7 +106,7 @@ async def on_message(message):
         elif message.content.startswith("!quote"):
             with open ("quotes.txt", "r") as f:
                 block_text = f.read()
-                quotes = block_text.split(" | ")
+                quotes = block_text.split("\n\n")
                 choice = random.randint(0, len(quotes)-1)
                 await client.send_message(message.channel, quotes[choice])
 
@@ -116,7 +116,7 @@ async def on_message(message):
         elif message.content.startswith("!help"):
             await client.send_message(message.channel, help_message)
 
-    except EOFError:  # (ValueError, IndexError, NameError, TypeError)
+    except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
 
