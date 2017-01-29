@@ -144,12 +144,12 @@ async def on_message(message):
             else:
                 await client.send_message(message.channel, "Invalid album ID")
 
-        elif message.content.startswith("!solve "):
+        elif message.content.startswith("!solve "):  # Needs improving
             eq = message.content.split(" ", 1)[1]
             try:
                 solved = solve(eq)
                 await client.send_message(message.channel, str(solved))
-            except (NameError, TypeError):
+            except (NameError, TypeError):  # Doesent always catch? Testing needed
                 await client.send_message(message.channel, "Incorrectly formatted request")
 
         elif message.content.startswith("!info"):
