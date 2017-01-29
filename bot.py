@@ -1,3 +1,4 @@
+from imgur_album_link_xtractor import get_links
 from platform import python_version
 import wikipedia
 import platform
@@ -30,6 +31,7 @@ help_message = """
 **!choice** *Comma,Seperated,List,Of,Choices*
 **!quote**
 **!wiki** *page, such as "Donald Trump"*
+**!imgurlinks** *album ID*
 **!kys**
 **!info**
 **!help**"""
@@ -126,6 +128,11 @@ async def on_message(message):
                 await client.send_message(message.channel, "That does not match any Wikipedia pages")
             except wikipedia.exceptions.DisambiguationError:
                 await client.send_message(message.channel, "Multiple results found, try something else")
+
+        elif message.content.startswith("!imgurlinks"):
+            albumID = message.content.split(" ", 1)[1]
+            links = get_links(albumID)
+            await client.send_message(message.channel, "\n".join(links))
 
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
