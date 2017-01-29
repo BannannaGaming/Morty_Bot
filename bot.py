@@ -106,7 +106,7 @@ async def on_message(message):
         elif message.content.startswith("!help"):
             await client.send_message(message.channel, "*Commands*:\n**!playlist**\n**!coinflip**\n**!roll**\n**!choice**\n**!quote**\n**!info**\n**!help**")
 
-    except (ValueError, IndexError, NameError, TypeError):
+    except EOFError:  # (ValueError, IndexError, NameError, TypeError)
         print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
 
