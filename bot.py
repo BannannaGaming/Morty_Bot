@@ -1,6 +1,7 @@
 import discord
 import os
 import json
+import requests
 from time import sleep
 
 # Add to server
