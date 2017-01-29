@@ -14,7 +14,8 @@ discord_token = os.environ["morty_discord_token"]
 api_key = os.environ["yt_key"]
 client = discord.Client()
 
-to_send = ""
+to_send = ""#
+ids = ""
 
 # Multi-line code block
 info_text = """
@@ -29,7 +30,7 @@ Platform       : {}
            platform.system())
 
 async def add_to_playlist(req, first=False):
-    global to_send
+    global to_send, ids
 
     async with aiohttp.get(req) as info:
         ids = await info.json()
