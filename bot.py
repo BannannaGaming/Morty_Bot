@@ -20,14 +20,15 @@ client = discord.Client()
 # sympy math things
 x, y, a, b, z = symbols("x y a b z")
 
-# quotes
+# Quotes
 with open ("quotes.txt", "r") as f:
     block_text = f.read()
     quotes = block_text.split("\n\n")
 
-# dictionary api
+# Dictionary api
 define_word_url = "http://api.pearson.com/v2/dictionaries/laes/entries?headword={}&limit=1"
 
+# Help message
 help_message = """
 • **Search**
   • `!urban`  `word or phrase`
@@ -53,7 +54,7 @@ help_message = """
   • `!info`
     • Get information about this bot
   • `!ping`
-    • Am I online?
+    • Am I online? - Currently only for verified users
   • `!help`
     • Shows this menu
 """
@@ -128,7 +129,6 @@ async def on_message(message):
         return
     else:
         user = "{0.author.mention}".format(message)  # Get user mention
-        print(user)
 
     try:
         # Stop random people spamming !ping with user check
