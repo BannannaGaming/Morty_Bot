@@ -65,12 +65,12 @@ async def get_definition(word):
     async with aiohttp.get(define_word_url.format(word)) as info:
         word_info = await info.json()
 
-    definition = word_info["results"]["senses"]["definition"]
+    try:
+        definition = word_info["results"][0]["senses"][0]["definition"]  # Weird format
+        return "`{}`".format(definition[0])
 
-    if defintion != "":
-        return definition
-    else:
-        return "Undefined"
+    except IndexError:
+        return "Error"
 
 @client.event
 async def on_message(message):
@@ -126,7 +126,7 @@ async def on_message(message):
         elif message.content.startswith("!define "):
             word = message.content.split(" ", 1)[1]
             defined = await get_definition(word)
-            if defined != "Undefined":
+            if defined != "Error":
                 await client.send_message(message.channel, defined)
             else:
                 await client.send_message(message.channel, "{} cannot be found".format(word))
