@@ -128,6 +128,7 @@ async def on_message(message):
         return
     else:
         user = "{0.author.mention}".format(message)  # Get user mention
+        print(user)
 
     try:
         if message.content.startswith("!ping"):
