@@ -123,7 +123,7 @@ async def on_message(message):
             except (NameError, TypeError):  # Doesent always catch? Testing needed
                 await client.send_message(message.channel, "Incorrectly formatted request")
 
-        elif message.content.startswith("!define ")
+        elif message.content.startswith("!define "):
             word = message.content.split(" ", 1)[1]
             defined = await get_definition(word)
             if defined != "Undefined":
