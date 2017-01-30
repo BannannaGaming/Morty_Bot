@@ -28,8 +28,12 @@ define_word_url = "http://api.pearson.com/v2/dictionaries/laes/entries?headword=
 
 help_message = """
 • **Search**
+  • `!urban`  `word or phrase`
+    • Search and show a definition and example from urbandictionary
   • `!wiki`  `wikipedia page, such as "Star Wars"`
     • Search and show a snippet of a given wikipedia page
+  • `!define`  `word`
+    • Search and show a definition of the given word
 
 • **Maths**
   • `!solve`  `equation to solve`
