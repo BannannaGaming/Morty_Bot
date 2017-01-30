@@ -8,6 +8,8 @@ import discord
 import random
 import os
 
+# Most send's have [:2000] to prevent going over message length limit
+
 # https://gist.github.com/hzsweers/8595628
 # Get env variable(s) from Heroku
 discord_token = os.environ["morty_discord_token"]
@@ -171,12 +173,12 @@ async def on_message(message):
         elif message.content.startswith("!define "):
             word = message.content.split(" ", 1)[1]
             defined_to_send = await get_definition(word)
-            await client.send_message(message.channel, defined_to_send)
+            await client.send_message(message.channel, defined_to_send[:2000])
 
         elif message.content.startswith("!urban "):
             ud_word = message.content.split(" ", 1)[1]
             ud_to_send = await get_urban_def(ud_word)
-            await client.send_message(message.channel, ud_to_send)
+            await client.send_message(message.channel, ud_to_send[:2000])
 
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
