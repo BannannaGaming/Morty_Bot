@@ -23,29 +23,27 @@ with open ("quotes.txt", "r") as f:
     quotes = block_text.split("\n\n")
 
 help_message = """
-***Commands***
+• **Search**
+  - `!wiki`  `wikipedia page, such as "Star Wars"`
+    + Search and show a snippet of a given wikipedia page
 
- - **Search**
-  - `!wiki` `wikipedia page, such as "Star Wars"`
-    - Search and show a snippet of a given wikipedia page
+• **Maths**
+  - `!solve`  `equation to solve`
+    + Solve an equation such as `(x**2+7)*(x+1)` *(must only use x,y,a,b,z)*
 
- - **Maths**
-  - `!solve` `equation to solve`
-    - Solve an equation such as `(x**2+7)*(x+1)` *(must only use x,y,a,b,z)*
-
- - **Misc**
+• **Misc**
   - `!coinflip`
-    - Heads or tails!
+    + Heads or tails!
   - `!roll`
-    - Returns a random number between 1 & 6
-  - `!choice` `Comma,Seperated,List,Of,Choices`
-    - Pick a value from a given list of choices
+    + Returns a random number between 1 & 6
+  - `!choice`  `Comma,Seperated,List,Of,Choices`
+    + Pick a value from a given list of choices
   - `!quote`
-    - Get a random Rick and Morty quote
+    + Get a random Rick and Morty quote
   - `!info`
-    - Get information about this bot
+    + Get information about this bot
   - `!help`
-    - Shows this menu
+    + Shows this menu
 """
 
 # Multi-line code block
