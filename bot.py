@@ -127,7 +127,7 @@ async def on_message(message):
             word = message.content.split(" ", 1)[1]
             defined = await get_definition(word)
             if defined != "Error":
-                defined = "`{}`\n```{}```"
+                defined = "`{}`\n```{}```".format(word, defined)
                 await client.send_message(message.channel, defined)
             else:
                 await client.send_message(message.channel, "{} cannot be found".format(word))
