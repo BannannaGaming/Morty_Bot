@@ -54,6 +54,15 @@ Other planned updates:
 
 ---
 
+## Known issues
+
+ * `!define ping (network)` and possibly others cause `Something went wrong` message instead of `cannot be found`
+  - `Debug info: Attempt to decode JSON with unexpected mimetype`
+
+---
+
 ## Notes
 
 Morty-Bot may eventually become seperate from mee6
+
+---

@@ -189,7 +189,7 @@ async def on_message(message):
             await client.send_message(message.channel, help_message)
 
     except (ValueError, IndexError, NameError, TypeError):
-        print("Something went wrong :(")
+        print("Something went wrong :(")  # Debugging
         await client.send_message(message.channel, "Something went wrong :cry:")
 
 
