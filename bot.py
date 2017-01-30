@@ -52,7 +52,7 @@ help_message = """
 
 # Urban dictionary message
 ud_msg = """
-*{}*
+**{}**
 ```{}```
 ***Example***
 ```{}```"""
