@@ -1,4 +1,5 @@
 from platform import python_version
+import urbandictionary as ud
 from sympy import *
 import wikipedia
 import platform
@@ -48,6 +49,13 @@ help_message = """
   • `!help`
     • Shows this menu
 """
+
+# Urban dictionary message
+ud_msg = """
+{}
+```{}```
+***Example***
+```{}```"""
 
 # Multi-line code block
 info_text = """
@@ -131,6 +139,15 @@ async def on_message(message):
                 await client.send_message(message.channel, defined)
             else:
                 await client.send_message(message.channel, "{} cannot be found".format(word))
+
+        elif message.content.startswith("!urban "):
+            ud_word = message.content.split(" ", 1)[1]
+            defs = ud.define(ud_word)
+            for d in defs[:1]:  # Get first definition from generator
+                ud_name =  d.word
+                ud_definition = d.definition
+                ud_example = d.example
+            await client.send_message(message.channel, ud_msg.format(ud_name, ud_definition, ud_example))
 
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
