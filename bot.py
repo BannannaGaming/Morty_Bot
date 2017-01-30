@@ -67,7 +67,7 @@ async def get_definition(word):
 
     try:
         definition = word_info["results"][0]["senses"][0]["definition"]  # Weird format
-        return "`{}`".format(definition[0])
+        return "{}".format(definition[0])
 
     except IndexError:
         return "Error"
@@ -127,6 +127,7 @@ async def on_message(message):
             word = message.content.split(" ", 1)[1]
             defined = await get_definition(word)
             if defined != "Error":
+                defined = "`{}`\n```{}```"
                 await client.send_message(message.channel, defined)
             else:
                 await client.send_message(message.channel, "{} cannot be found".format(word))
