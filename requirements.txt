@@ -1,5 +1,4 @@
 discord.py==0.16.0
 aiohttp==1.0.5
 wikipedia==1.4.0
-imgurpython==1.1.7
 sympy==1.0

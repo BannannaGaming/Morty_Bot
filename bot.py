@@ -17,6 +17,11 @@ client = discord.Client()
 # sympy math things
 x, y, a, b, z = symbols("x y a b z")
 
+# quotes
+with open ("quotes.txt", "r") as f:
+    block_text = f.read()
+    quotes = block_text.split("\n\n")
+
 help_message = """
 ***Commands***
 
@@ -81,9 +86,6 @@ async def on_message(message):
             await client.send_message(message.channel, "I choose: {}".format(choices[choice]))
 
         elif message.content.startswith("!quote"):
-            with open ("quotes.txt", "r") as f:
-                block_text = f.read()
-                quotes = block_text.split("\n\n")
                 choice = random.randint(0, len(quotes)-1)
                 await client.send_message(message.channel, quotes[choice])
 
