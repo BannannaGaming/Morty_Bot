@@ -131,7 +131,8 @@ async def on_message(message):
         print(user)
 
     try:
-        if message.content.startswith("!ping"):
+        # Stop random people spamming !ping with user check
+        if message.content.startswith("!ping") and user == "<@263412940869206027>":
             await client.send_message(message.channel, "pong")
 
         elif message.content.startswith("!coinflip"):
