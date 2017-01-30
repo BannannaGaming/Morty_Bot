@@ -62,7 +62,7 @@ Platform       : {}
            platform.system())
 
 async def get_definition(word):
-     async with aiohttp.get(define_word_url.format(word)) as info:
+    async with aiohttp.get(define_word_url.format(word)) as info:
         word_info = await info.json()
 
     definition = word_info["results"]["senses"]["definition"]
