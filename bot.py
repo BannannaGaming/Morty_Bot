@@ -22,28 +22,31 @@ with open ("quotes.txt", "r") as f:
     block_text = f.read()
     quotes = block_text.split("\n\n")
 
+# dictionary api
+define_word_url = "http://api.pearson.com/v2/dictionaries/laes/entries?headword={}&limit=1"
+
 help_message = """
 • **Search**
-  - `!wiki`  `wikipedia page, such as "Star Wars"`
-    + Search and show a snippet of a given wikipedia page
+  • `!wiki`  `wikipedia page, such as "Star Wars"`
+    • Search and show a snippet of a given wikipedia page
 
 • **Maths**
-  - `!solve`  `equation to solve`
-    + Solve an equation such as `(x**2+7)*(x+1)` *(must only use x,y,a,b,z)*
+  • `!solve`  `equation to solve`
+    • Solve an equation such as `(x**2+7)*(x+1)` *(must only use x,y,a,b,z)*
 
 • **Misc**
-  - `!coinflip`
-    + Heads or tails!
-  - `!roll`
-    + Returns a random number between 1 & 6
-  - `!choice`  `Comma,Seperated,List,Of,Choices`
-    + Pick a value from a given list of choices
-  - `!quote`
-    + Get a random Rick and Morty quote
-  - `!info`
-    + Get information about this bot
-  - `!help`
-    + Shows this menu
+  • `!coinflip`
+    • Heads or tails!
+  • `!roll`
+    • Returns a random number between 1 & 6
+  • `!choice`  `Comma,Seperated,List,Of,Choices`
+    • Pick a value from a given list of choices
+  • `!quote`
+    • Get a random Rick and Morty quote
+  • `!info`
+    • Get information about this bot
+  • `!help`
+    • Shows this menu
 """
 
 # Multi-line code block
@@ -57,6 +60,17 @@ Platform       : {}
 """.format(python_version(),
            discord.__version__,
            platform.system())
+
+async def get_definition(word):
+     async with aiohttp.get(define_word_url.format(word)) as info:
+        word_info = await info.json()
+
+    definition = word_info["results"]["senses"]["definition"]
+
+    if defintion != "":
+        return definition
+    else:
+        return "Undefined"
 
 @client.event
 async def on_message(message):
@@ -90,7 +104,7 @@ async def on_message(message):
         elif message.content.startswith("!kys"):
             await client.send_message(message.channel, "I agree, :regional_indicator_k: :regional_indicator_y: :regional_indicator_s:")
 
-        elif message.content.startswith("!wiki "):
+        elif message.content.startswith("!wiki "):  # Try making this async later
             search = message.content.split(" ", 1)[1]
             try:
                 page = wikipedia.page(search)
@@ -108,6 +122,14 @@ async def on_message(message):
                 await client.send_message(message.channel, str(solved))
             except (NameError, TypeError):  # Doesent always catch? Testing needed
                 await client.send_message(message.channel, "Incorrectly formatted request")
+
+        elif message.content.startswith("!define ")
+            word = message.content.split(" ", 1)[1]
+            defined = await get_definition(word)
+            if defined != "Undefined":
+                await client.send_message(message.channel, defined)
+            else:
+                await client.send_message(message.channel, "{} cannot be found".format(word))
 
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
