@@ -50,6 +50,8 @@ help_message = """
     • Get a random Rick and Morty quote
   • `!info`
     • Get information about this bot
+  • `!ping`
+    • Am I online?
   • `!help`
     • Shows this menu
 """
@@ -60,6 +62,12 @@ ud_msg = """
 ```{}```
 ***Example***
 ```{}```"""
+
+# Wikipedia message
+wiki_msg = "**{}** - `{}`\n```{}```"
+
+# Definition message
+define_msg = "**{}**\n```{}```"
 
 # Multi-line code block
 info_text = """
@@ -92,7 +100,10 @@ async def on_message(message):
         user = "{0.author.mention}".format(message)  # Get user mention
 
     try:
-        if message.content.startswith("!coinflip"):
+        if message.content.startswith("!ping"):
+            await client.send_message(message.channel, "pong")
+
+        elif message.content.startswith("!coinflip"):
             flip = random.randint(1, 2)
             if flip == 1:
                 await client.send_message(message.channel, "Heads wins :ok_hand:")
@@ -120,7 +131,7 @@ async def on_message(message):
             search = message.content.split(" ", 1)[1]
             try:
                 page = wikipedia.page(search)
-                wiki_message = "`{} - {}`\n\n```{}...```".format(page.title, page.url, page.content[:1000])
+                wiki_message = wiki_msg.format(page.title, page.url, page.content[:1000])
                 await client.send_message(message.channel, wiki_message)
             except wikipedia.exceptions.PageError:
                 await client.send_message(message.channel, "That does not match any Wikipedia pages")
@@ -139,7 +150,7 @@ async def on_message(message):
             word = message.content.split(" ", 1)[1]
             defined = await get_definition(word)
             if defined != "Error":
-                defined = "`{}`\n```{}```".format(word, defined)
+                defined = define_msg.format(word, defined)
                 await client.send_message(message.channel, defined)
             else:
                 await client.send_message(message.channel, "{} cannot be found".format(word))
