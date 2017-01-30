@@ -81,16 +81,44 @@ Platform       : {}
            discord.__version__,
            platform.system())
 
+
+async def search_wiki(search_req):
+    try:
+        page = wikipedia.page(search_req)
+        wiki_def = wiki_msg.format(page.title, page.url, page.content[:1000])
+        return wiki_def
+
+    except wikipedia.exceptions.PageError:
+        return  "That does not match any Wikipedia pages"
+
+    except wikipedia.exceptions.DisambiguationError:
+        return "Multiple results found, try something else"
+
+
+async def get_urban_def(word):
+    try:
+        defs = ud.define(word)
+        for d in defs[:1]:  # Get first definition from generator
+            ud_name =  d.word
+            ud_definition = d.definition
+            ud_example = d.example
+        return ud_msg.format(ud_name, ud_definition, ud_example)
+
+    except NameError:
+        return "Word not located in urban dictionary"
+
+
 async def get_definition(word):
     async with aiohttp.get(define_word_url.format(word)) as info:
         word_info = await info.json()
-
     try:
         definition = word_info["results"][0]["senses"][0]["definition"]  # Weird format
-        return "{}".format(definition[0])
+        defined = define_msg.format(word, definition[0])
+        return defined
 
     except IndexError:
-        return "Error"
+        return "{} cannot be found".format(word)
+
 
 @client.event
 async def on_message(message):
@@ -127,16 +155,10 @@ async def on_message(message):
         elif message.content.startswith("!kys"):
             await client.send_message(message.channel, "I agree, :regional_indicator_k: :regional_indicator_y: :regional_indicator_s:")
 
-        elif message.content.startswith("!wiki "):  # Try making this async later
-            search = message.content.split(" ", 1)[1]
-            try:
-                page = wikipedia.page(search)
-                wiki_message = wiki_msg.format(page.title, page.url, page.content[:1000])
-                await client.send_message(message.channel, wiki_message)
-            except wikipedia.exceptions.PageError:
-                await client.send_message(message.channel, "That does not match any Wikipedia pages")
-            except wikipedia.exceptions.DisambiguationError:
-                await client.send_message(message.channel, "Multiple results found, try something else")
+        elif message.content.startswith("!wiki "):
+            search_req = message.content.split(" ", 1)[1]
+            wiki_to_send = await search_wiki(search_req)
+            await client.send_message(message.channel, wiki_to_send)
 
         elif message.content.startswith("!solve "):  # Needs improving
             eq = message.content.split(" ", 1)[1]
@@ -148,21 +170,13 @@ async def on_message(message):
 
         elif message.content.startswith("!define "):
             word = message.content.split(" ", 1)[1]
-            defined = await get_definition(word)
-            if defined != "Error":
-                defined = define_msg.format(word, defined)
-                await client.send_message(message.channel, defined)
-            else:
-                await client.send_message(message.channel, "{} cannot be found".format(word))
+            defined_to_send = await get_definition(word)
+            await client.send_message(message.channel, defined_to_send)
 
         elif message.content.startswith("!urban "):
             ud_word = message.content.split(" ", 1)[1]
-            defs = ud.define(ud_word)
-            for d in defs[:1]:  # Get first definition from generator
-                ud_name =  d.word
-                ud_definition = d.definition
-                ud_example = d.example
-            await client.send_message(message.channel, ud_msg.format(ud_name, ud_definition, ud_example))
+            ud_to_send = await get_urban_def(ud_word)
+            await client.send_message(message.channel, ud_to_send)
 
         elif message.content.startswith("!info"):
             await client.send_message(message.channel, info_text)
@@ -174,9 +188,11 @@ async def on_message(message):
         print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
 
+
 @client.event
 async def on_ready():
     print("Logged in as\n{}\n{}\n------".format(client.user.name, client.user.id))
     await client.change_presence(game=discord.Game(name="with Rick <3"))
+
 
 client.run(discord_token)
