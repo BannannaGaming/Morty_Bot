@@ -2,7 +2,7 @@
 
 ---
 
-[Add Morty-Bot to your server](https://discordapp.com/oauth2/authorize?client_id=275050313529032706&scope=bot&permissions=0)
+[Add Morty-Bot to your server](https://discordapp.com/oauth2/authorize?client_id=275050313529032706&scope=bot&permissions=0) | [Official Discord](https://www.discord.gg/kDE7HJy)
 
 ---
 
