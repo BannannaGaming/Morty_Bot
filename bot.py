@@ -25,9 +25,6 @@ with open ("quotes.txt", "r") as f:
     block_text = f.read()
     quotes = block_text.split("\n\n")
 
-# Dictionary api
-define_word_url = "http://api.pearson.com/v2/dictionaries/laes/entries?headword={}&limit=1"
-
 # Help message
 help_message = """
 • **Search**
@@ -35,8 +32,6 @@ help_message = """
     • Search and show a definition and example from urbandictionary
   • `!wiki`  `wikipedia page, such as "Star Wars"`
     • Search and show a snippet of a given wikipedia page
-  • `!define`  `word`
-    • Search and show a definition of the given word
 
 • **Maths**
   • `!solve`  `equation to solve`
@@ -68,9 +63,6 @@ ud_msg = """
 
 # Wikipedia message
 wiki_msg = "**{}** - `{}`\n```{}```"
-
-# Definition message
-define_msg = "**{}**\n```{}```"
 
 # Multi-line code block
 info_text = """
@@ -109,18 +101,6 @@ async def get_urban_def(word):
 
     except NameError:
         return "Word not located in urban dictionary"
-
-
-async def get_definition(word):
-    async with aiohttp.get(define_word_url.format(word)) as info:
-        word_info = await info.json()
-    try:
-        definition = word_info["results"][0]["senses"][0]["definition"]  # Weird format
-        defined = define_msg.format(word, definition[0])
-        return defined
-
-    except IndexError:
-        return "{} cannot be found".format(word)
 
 
 @client.event
@@ -171,11 +151,6 @@ async def on_message(message):
                 await client.send_message(message.channel, str(solved))
             except (NameError, TypeError):  # Doesent always catch? Testing needed
                 await client.send_message(message.channel, "Incorrectly formatted request")
-
-        elif message.content.startswith("!define "):
-            word = message.content.split(" ", 1)[1]
-            defined_to_send = await get_definition(word)
-            await client.send_message(message.channel, defined_to_send[:2000])
 
         elif message.content.startswith("!urban "):
             ud_word = message.content.split(" ", 1)[1]

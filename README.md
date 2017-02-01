@@ -13,8 +13,6 @@
     + Search and show a definition and example from urbandictionary
   - `!wiki`  `wikipedia page, such as "Star Wars"`
     + Search and show a snippet of a given wikipedia page
-  - `!define`  `word`
-    + Search and show a definition of the given word
 
 * Maths
   - `!solve`  `equation to solve`
@@ -58,11 +56,5 @@ Other planned updates:
 
  * `!define ping (network)` and possibly others cause `Something went wrong` message instead of `cannot be found`
   - `Debug info: Attempt to decode JSON with unexpected mimetype`
-
----
-
-## Notes
-
-Morty-Bot may eventually become seperate from mee6
 
 ---
