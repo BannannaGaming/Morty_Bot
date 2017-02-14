@@ -25,6 +25,9 @@ with open ("quotes.txt", "r") as f:
     block_text = f.read()
     quotes = block_text.split("\n\n")
 
+# Dictionary api
+define_word_url = "http://api.pearson.com/v2/dictionaries/laes/entries?headword={}&limit=1"
+
 # Help message
 help_message = """
 • **Search**
@@ -32,11 +35,11 @@ help_message = """
     • Search and show a definition and example from urbandictionary
   • `!wiki`  `wikipedia page, such as "Star Wars"`
     • Search and show a snippet of a given wikipedia page
-
+  • `!define`  `word`
+    • Search and show a definition of the given word
 • **Maths**
   • `!solve`  `equation to solve`
     • Solve an equation such as `(x**2+7)*(x+1)` *(must only use x,y,a,b,z)*
-
 • **Misc**
   • `!coinflip`
     • Heads or tails!
@@ -64,6 +67,9 @@ ud_msg = """
 # Wikipedia message
 wiki_msg = "**{}** - `{}`\n```{}```"
 
+# Definition message
+define_msg = "**{}**\n```{}```"
+
 # Multi-line code block
 info_text = """
 ```
@@ -75,6 +81,32 @@ Platform       : {}
 """.format(python_version(),
            discord.__version__,
            platform.system())
+
+ph = "http://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={}"
+
+ph_text = """
+`Title    : {}`
+`Views    : {}`
+`Rating   : {}`
+`Duration : {}`
+`Link     : {}`
+"""  # Last 2 are desc and link
+
+
+# I blame Sam
+async def dirty_stuff(search_term):
+    async with aiohttp.get(ph.format(search_term)) as info:
+        ph_link = await info.json()
+    try:
+        title = ph_link["videos"][0]["title"]
+        views = ph_link["videos"][0]["views"]
+        rating = ph_link["videos"][0]["rating"]
+        dur = ph_link["videos"][0]["duration"]
+        link = ph_link["videos"][0]["url"]
+        return ph_text.format(title, views, rating, dur, link)
+
+    except IndexError:
+        return "{} cannot be found".format(word)
 
 
 async def search_wiki(search_req):
@@ -103,6 +135,18 @@ async def get_urban_def(word):
         return "Word not located in urban dictionary"
 
 
+async def get_definition(word):
+    async with aiohttp.get(define_word_url.format(word)) as info:
+        word_info = await info.json()
+    try:
+        definition = word_info["results"][0]["senses"][0]["definition"]  # Weird format
+        defined = define_msg.format(word, definition[0])
+        return defined
+
+    except IndexError:
+        return "{} cannot be found".format(word)
+
+
 @client.event
 async def on_message(message):
     if message.author == client.user:  # Don't reply to self
@@ -112,39 +156,39 @@ async def on_message(message):
 
     try:
         # Stop random people spamming !ping with user check
-        if message.content.startswith("!ping") and user == "<@263412940869206027>":
+        if message.content.lower().lower().startswith("!ping") and user == "<@263412940869206027>":
             await client.send_message(message.channel, "pong")
 
-        elif message.content.startswith("!coinflip"):
+        elif message.content.lower().startswith("!coinflip"):
             flip = random.randint(1, 2)
             if flip == 1:
                 await client.send_message(message.channel, "Heads wins :ok_hand:")
             else:
                 await client.send_message(message.channel, "Tails wins :ok_hand:")
 
-        elif message.content.startswith("!roll"):
+        elif message.content.lower().startswith("!roll"):
             die = random.randint(1, 6)
             await client.send_message(message.channel, "{} rolled {}".format(user, die))
 
-        elif message.content.startswith("!choice "):
+        elif message.content.lower().startswith("!choice "):
             choices_str = message.content.split(" ", 1)[1]
             choices = choices_str.split(",")
             choice = random.randint(0, len(choices)-1)
             await client.send_message(message.channel, "I choose: {}".format(choices[choice]))
 
-        elif message.content.startswith("!quote"):
+        elif message.content.lower().startswith("!quote"):
                 choice = random.randint(0, len(quotes)-1)
                 await client.send_message(message.channel, quotes[choice])
 
-        elif message.content.startswith("!kys"):
+        elif message.content.lower().startswith("!kys"):
             await client.send_message(message.channel, "I agree, :regional_indicator_k: :regional_indicator_y: :regional_indicator_s:")
 
-        elif message.content.startswith("!wiki "):
+        elif message.content.lower().startswith("!wiki "):
             search_req = message.content.split(" ", 1)[1]
             wiki_to_send = await search_wiki(search_req)
             await client.send_message(message.channel, wiki_to_send)
 
-        elif message.content.startswith("!solve "):  # Needs improving
+        elif message.content.lower().startswith("!solve "):  # Needs improving
             eq = message.content.split(" ", 1)[1]
             try:
                 solved = solve(eq)
@@ -152,15 +196,25 @@ async def on_message(message):
             except (NameError, TypeError):  # Doesent always catch? Testing needed
                 await client.send_message(message.channel, "Incorrectly formatted request")
 
-        elif message.content.startswith("!urban "):
+        elif message.content.lower().startswith("!define "):
+            word = message.content.split(" ", 1)[1]
+            defined_to_send = await get_definition(word)
+            await client.send_message(message.channel, defined_to_send[:2000])
+
+        elif message.content.lower().startswith("!ph "):
+            search = message.content.split(" ", 1)[1]
+            ph_to_send = await dirty_stuff(search)
+            await client.send_message(message.channel, ph_to_send)
+
+        elif message.content.lower().startswith("!urban "):
             ud_word = message.content.split(" ", 1)[1]
             ud_to_send = await get_urban_def(ud_word)
             await client.send_message(message.channel, ud_to_send[:2000])
 
-        elif message.content.startswith("!info"):
+        elif message.content.lower().startswith("!info"):
             await client.send_message(message.channel, info_text)
 
-        elif message.content.startswith("!help"):
+        elif message.content.lower().startswith("!help"):
             await client.send_message(message.channel, help_message)
 
     except (ValueError, IndexError, NameError, TypeError):
