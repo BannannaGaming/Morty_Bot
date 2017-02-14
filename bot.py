@@ -85,7 +85,7 @@ Platform       : {}
            platform.system())
 
  # http://www.hubtraffic.com
-ph = "http://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&period=alltime&thumbsize=small&search={}"
+ph = "http://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&ordering=rating&period=alltime&thumbsize=small&search={}"
 
 ph_text = """
 `Title    : {}`
@@ -114,7 +114,7 @@ async def dirty_stuff(search_term):
         link = ph_link["videos"][0]["url"]
         return ph_text.format(title, views, rating, dur, link)
 
-    except IndexError:
+    except (IndexError, KeyError):
         return "{} cannot be found".format(word)
 
 
