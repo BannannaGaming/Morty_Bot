@@ -192,7 +192,7 @@ async def big(words):
             try:
                 output.append(big_dict[letter])
             except KeyError:
-                output.append("?")
+                output.append(letter)
 
         output.append(" ")
     return output
