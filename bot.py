@@ -84,7 +84,8 @@ Platform       : {}
            discord.__version__,
            platform.system())
 
-ph = "http://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&search={}"
+ # http://www.hubtraffic.com
+ph = "http://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&period=alltime&thumbsize=small&search={}"
 
 ph_text = """
 `Title    : {}`
@@ -97,8 +98,14 @@ ph_text = """
 
 # I blame Sam
 async def dirty_stuff(search_term):
-    async with aiohttp.get(ph.format(search_term)) as info:
+    words = []
+    for word in search_term.split(" "):
+        words.append(word)
+
+    # %20 = URL formatting
+    async with aiohttp.get(ph.format("%20".join(words))) as info:
         ph_link = await info.json()
+
     try:
         title = ph_link["videos"][0]["title"]
         views = ph_link["videos"][0]["views"]
