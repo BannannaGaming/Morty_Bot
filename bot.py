@@ -264,7 +264,7 @@ async def on_message(message):
 
         elif message.content.lower().startswith("!big "):
             words_to_big = message.content.split(" ", 1)[1]
-            bigger_words = big(words_to_big)
+            bigger_words = big(" ".join(words_to_big))
             await client.send_message(message.channel, " ".join(bigger_words))
 
         elif message.content.lower().startswith("!info"):
