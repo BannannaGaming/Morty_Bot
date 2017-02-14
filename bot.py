@@ -37,6 +37,8 @@ help_message = """
     • Search and show a snippet of a given wikipedia page
   • `!define`  `word`
     • Search and show a definition of the given word
+  • `!ph` `search term`
+    • ;)
 • **Maths**
   • `!solve`  `equation to solve`
     • Solve an equation such as `(x**2+7)*(x+1)` *(must only use x,y,a,b,z)*
@@ -89,7 +91,7 @@ ph_text = """
 `Views    : {}`
 `Rating   : {}`
 `Duration : {}`
-`Link     : {}`
+`Link     :` {}
 """  # Last 2 are desc and link
 
 
