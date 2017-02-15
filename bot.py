@@ -89,12 +89,14 @@ Platform       : {}
  # http://www.hubtraffic.com
 ph = "http://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&ordering=mostviewed&period=weekly&thumbsize=small&search={}"
 
+# Python because colours
 ph_text = """
 **{}**
-`Views    : {}`
-`Rating   : {}`
-`Duration : {}`
-`Link     :` {}
+```python
+Views    : {}
+Rating   : {}
+Duration : {}```
+{}
 """  # Last 2 are desc and link
 
 # BIGGGG
