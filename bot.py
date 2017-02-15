@@ -90,7 +90,7 @@ Platform       : {}
 ph = "http://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&ordering=mostviewed&period=weekly&thumbsize=small&search={}"
 
 ph_text = """
-`Title    : {}`
+**{}**
 `Views    : {}`
 `Rating   : {}`
 `Duration : {}`
