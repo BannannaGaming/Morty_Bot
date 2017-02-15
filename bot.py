@@ -51,6 +51,8 @@ help_message = """
     • Pick a value from a given list of choices
   • `!quote`
     • Get a random Rick and Morty quote
+  • `!big`
+    • Make text bigger :wink:
   • `!info`
     • Get information about this bot
   • `!ping`
@@ -122,8 +124,20 @@ big_dict = {
     "w":":regional_indicator_w:",
     "x":":regional_indicator_x:",
     "y":":regional_indicator_y:",
-    "z":":regional_indicator_z:"
+    "z":":regional_indicator_z:",
+    "!":":exclamation:",
+    "?":":question:",
+    "1":":clock1:",
+    "2":":clock2:",
+    "3":":clock3:",
+    "4":":clock4:",
+    "5":":clock5:",
+    "6":":clock6:",
+    "7":":clock7:",
+    "8":":clock8:",
+    "9":":clock9:",
 }
+
 
 # I blame Sam
 async def dirty_stuff(search_term):
@@ -265,7 +279,7 @@ async def on_message(message):
         elif message.content.lower().startswith("!big "):
             words_to_big = message.content.split(" ", 1)[1]
             bigger_words = await big(" ".join(words_to_big))
-            big_to_send = " ".join(bigger_words)
+            big_to_send = "".join(bigger_words)
             await client.send_message(message.channel, big_to_send)
 
         elif message.content.lower().startswith("!info"):
