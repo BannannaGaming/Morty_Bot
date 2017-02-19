@@ -38,7 +38,7 @@ help_message = """
   • `!define`  `word`
     • Search and show a definition of the given word
   • `!ph` `search term`
-    • ;)
+    • :wink:
 • **Maths**
   • `!solve`  `equation to solve`
     • Solve an equation such as `(x**2+7)*(x+1)` *(must only use x,y,a,b,z)*
@@ -52,7 +52,7 @@ help_message = """
   • `!quote`
     • Get a random Rick and Morty quote
   • `!big`
-    • Make text bigger :wink:
+    • Make text bigger
   • `!info`
     • Get information about this bot
   • `!ping`
@@ -81,7 +81,11 @@ info_text = """
 Python Version : {}
 API Version    : {}
 Platform       : {}
+- - - -  --  - - - -
 ```
+Add me to another server : http://bit.ly/Morty-bot
+Test me on my own server : https://www.discord.gg/kDE7HJy
+My source code : https://github.com/thatguywiththatname/Morty_Bot
 """.format(python_version(),
            discord.__version__,
            platform.system())
@@ -97,7 +101,7 @@ Views    : {}
 Rating   : {}
 Duration : {}```
 {}
-"""  # Last 2 are desc and link
+"""
 
 # BIGGGG
 big_dict = {
