@@ -5,3 +5,4 @@ sympy==1.0
 urbandictionary==1.1
 wordcloud==1.2.1
 matplotlib==1.5.3
+Pillow==3.2.0
