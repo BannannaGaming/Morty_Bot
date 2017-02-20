@@ -263,8 +263,7 @@ async def on_message(message):
         user = "{0.author.mention}".format(message)  # Get user mention
 
     try:
-        if message.server == "Dirty Gamers INC":
-            await analyse(message.content)
+        await analyse(message.content)
 
         # Admin commands
 
