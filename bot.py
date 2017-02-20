@@ -44,9 +44,11 @@ help_message = """
     • Search and show a definition of the given word
   • `!ph` `search term`
     • :wink:
+
 • **Maths**
   • `!solve`  `equation to solve`
     • Solve an equation such as `(x**2+7)*(x+1)` *(must only use x,y,a,b,z)*
+
 • **Misc**
   • `!coinflip`
     • Heads or tails!
@@ -58,12 +60,17 @@ help_message = """
     • Get a random Rick and Morty quote
   • `!big`
     • Make text bigger
+  • `!wc`
+    • Create a word cloud from all messages sent on this server `[only DGI server supported]`
   • `!info`
     • Get information about this bot
-  • `!ping`
-    • Am I online? - Currently only for verified users
   • `!help`
     • Shows this menu
+
+• **Bot Owner**
+  • `!ping`
+  • `!erasedict`
+  • `!listservers`
 """
 
 # Urban dictionary message
@@ -255,9 +262,25 @@ async def on_message(message):
     try:
         await analyse(message.content)
 
-        # Stop random people spamming !ping with user check
+        # Admin commands
+
         if message.content.lower().lower().startswith("!ping") and user == "<@263412940869206027>":
             await client.send_message(message.channel, "pong")
+            print("Message server: {}".format(message.server))
+
+        elif message.content.lower().lower().startswith("!erasedict") and user == "<@263412940869206027>":
+            word_dict = {}
+            await client.send_message(message.channel, "`word_dict` reset")
+
+        elif message.content.lower().lower().startswith("!listservers") and user == "<@263412940869206027>":
+            servers = []
+            for server in client.servers:
+                servers.append(server)
+
+            servers_to_send = "\n".join(servers)
+            await client.send_message(message.channel, servers_to_send)
+
+        # Other commands
 
         elif message.content.lower().startswith("!coinflip"):
             flip = random.randint(1, 2)
