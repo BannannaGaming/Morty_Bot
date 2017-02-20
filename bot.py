@@ -1,4 +1,6 @@
 from platform import python_version
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
 import urbandictionary as ud
 from sympy import *
 import wikipedia
@@ -7,6 +9,7 @@ import aiohttp
 import discord
 import random
 import os
+
 
 # Most send's have [:2000] to prevent going over message length limit
 
@@ -147,6 +150,27 @@ big_dict = {
 }
 
 
+# Word cloud
+word_dict = {}
+
+async def analyse(words):
+    for word in words.split(" "):  # Splits the sentence into separate words
+        if word not in word_dict: word_dict[word] = 1
+        else:                     word_dict[word] += 1
+
+async def create_wordcloud():
+    alltext = ""  # Easier for wordcloud to read from 1 string
+
+    for word in word_dict:
+        count = word_dict[word]
+        alltext += (word+" ")*count
+
+    wordcloud = WordCloud().generate(alltext)
+    plt.figure()
+    plt.imshow(wordcloud)
+    plt.axis("off")
+    plt.savefig("wordcloud_fig")  # Always saved as this
+
 # I blame Sam
 async def dirty_stuff(search_term):
     words = []
@@ -228,6 +252,8 @@ async def on_message(message):
         user = "{0.author.mention}".format(message)  # Get user mention
 
     try:
+        analyse(message.content)
+
         # Stop random people spamming !ping with user check
         if message.content.lower().lower().startswith("!ping") and user == "<@263412940869206027>":
             await client.send_message(message.channel, "pong")
@@ -295,6 +321,11 @@ async def on_message(message):
 
         elif message.content.lower().startswith("!help"):
             await client.send_message(message.channel, help_message)
+
+        elif message.content.lower().startswith("!wc"):
+            await client.send_message(message.channel, "Creating wordcloud...")
+            create_wordcloud()
+            await client.send_file(message.channel, "wordcloud_fig.png", filename="wordcloud_fig")
 
     except NameError:  # (ValueError, IndexError, NameError, TypeError)
         print("Something went wrong :(")  # Debugging
