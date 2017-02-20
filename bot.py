@@ -166,7 +166,6 @@ async def create_wordcloud():
         alltext += (word+" ")*count
 
     wordcloud = WordCloud().generate(alltext)
-    plt.figure()
     plt.imshow(wordcloud)
     plt.axis("off")
     plt.savefig("wordcloud_fig")  # Always saved as this
