@@ -1,14 +1,16 @@
 from platform import python_version
-import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import urbandictionary as ud
 from sympy import *
+import matplotlib
 import wikipedia
 import platform
 import aiohttp
 import discord
 import random
 import os
+matplotlib.use('Agg')  #  http://stackoverflow.com/a/41431428
+import matplotlib.pyplot as plt
 
 
 # Most send's have [:2000] to prevent going over message length limit
