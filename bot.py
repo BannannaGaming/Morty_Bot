@@ -168,7 +168,7 @@ async def analyse(words):
         else:                     word_dict[word] += 1
 
 async def create_wordcloud():
-    if word_dict = {}:
+    if word_dict == {}:
         return "no words"
 
     alltext = ""  # Easier for wordcloud to read from 1 string
