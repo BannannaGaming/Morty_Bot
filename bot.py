@@ -260,7 +260,8 @@ async def on_message(message):
         user = "{0.author.mention}".format(message)  # Get user mention
 
     try:
-        await analyse(message.content)
+        if message.server == "Dirty Gamers INC":
+            await analyse(message.content)
 
         # Admin commands
 
@@ -276,9 +277,7 @@ async def on_message(message):
             servers = []
             for server in client.servers:
                 servers.append(server)
-
-            servers_to_send = "\n".join(servers)
-            await client.send_message(message.channel, servers_to_send)
+            await client.send_message(message.channel, servers)
 
         # Other commands
 
