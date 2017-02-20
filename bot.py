@@ -326,7 +326,7 @@ async def on_message(message):
         elif message.content.lower().startswith("!wc"):
             await client.send_message(message.channel, "Creating wordcloud...")
             await create_wordcloud()
-            await client.send_file(message.channel, "wordcloud_fig.png", filename="wordcloud_fig")
+            await client.send_file(message.channel, "wordcloud_fig.png")
 
     except NameError:  # (ValueError, IndexError, NameError, TypeError)
         print("Something went wrong :(")  # Debugging
