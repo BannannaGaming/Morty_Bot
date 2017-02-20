@@ -253,7 +253,7 @@ async def on_message(message):
         user = "{0.author.mention}".format(message)  # Get user mention
 
     try:
-        analyse(message.content)
+        await analyse(message.content)
 
         # Stop random people spamming !ping with user check
         if message.content.lower().lower().startswith("!ping") and user == "<@263412940869206027>":
@@ -325,7 +325,7 @@ async def on_message(message):
 
         elif message.content.lower().startswith("!wc"):
             await client.send_message(message.channel, "Creating wordcloud...")
-            create_wordcloud()
+            await create_wordcloud()
             await client.send_file(message.channel, "wordcloud_fig.png", filename="wordcloud_fig")
 
     except NameError:  # (ValueError, IndexError, NameError, TypeError)
