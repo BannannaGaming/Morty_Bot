@@ -168,6 +168,9 @@ async def analyse(words):
         else:                     word_dict[word] += 1
 
 async def create_wordcloud():
+    if word_dict = {}:
+        return "no words"
+
     alltext = ""  # Easier for wordcloud to read from 1 string
 
     for word in word_dict:
@@ -227,7 +230,7 @@ async def get_urban_def(word):
         return "Word not located in urban dictionary"
 
 
-async def get_definition(word):
+async def get_definition(word):  # Buggy
     async with aiohttp.get(define_word_url.format(word)) as info:
         word_info = await info.json()
     try:
@@ -347,8 +350,11 @@ async def on_message(message):
 
         elif message.content.lower().startswith("!wc"):
             await client.send_message(message.channel, "Creating wordcloud...")
-            await create_wordcloud()
-            await client.send_file(message.channel, "wordcloud_fig.png")
+            response = await create_wordcloud()
+            if response != "no words":
+                await client.send_file(message.channel, "wordcloud_fig.png")#
+            else:
+                await client.send_message(message.channel, "No words!")
 
     except NameError:  # (ValueError, IndexError, NameError, TypeError)
         print("Something went wrong :(")  # Debugging
