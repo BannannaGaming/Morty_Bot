@@ -166,12 +166,12 @@ big_dict = {
 NEO_link = "https://api.nasa.gov/neo/rest/v1/feed?start_date={}&api_key={}"
 overview_link = "https://api.nasa.gov/neo/rest/v1/stats?&api_key={}"
 NEO_text = """
-Name: {}
-Estimated diameter: {} meters
+**Name: {}**
+```Estimated diameter: {} meters
 Potentially hazardous? {}
 Close approach date : {}
 Velocity: {}mph
-Miss distance: {} meters"""
+Miss distance: {} meters```"""
 
 # Word cloud
 word_dict = {}
@@ -375,8 +375,9 @@ async def on_message(message):
             ud_to_send = await get_urban_def(ud_word)
             await client.send_message(message.channel, ud_to_send[:2000])
 
-        elif message.content.lower().startswith("!NEO "):
-            await client.send_message(message.channel, get_NEOs())
+        elif message.content.lower().startswith("!NEO"):
+            nasa_to_send = get_NEOs()
+            await client.send_message(message.channel, nasa_to_send)
 
         elif message.content.lower().startswith("!big "):
             words_to_big = message.content.split(" ", 1)[1]
