@@ -64,7 +64,7 @@ help_message = """
     • Get a random Rick and Morty quote
   • `!big`
     • Make text bigger
-  • `!NEO`
+  • `!neo`
     • Get the closest near earth object (uses NASA API)
   • `!wc`
     • Create a word cloud from all messages sent on this server `[only DGI server supported]`
@@ -168,17 +168,30 @@ big_dict = {
 NEO_link = "https://api.nasa.gov/neo/rest/v1/feed?start_date={}&api_key={}"
 overview_link = "https://api.nasa.gov/neo/rest/v1/stats?&api_key={}"
 NEO_text = """
-**Name: {}**
+Data last updated: {}
+Near earth object count: {}
+
+**Near Earth Object - Name: {}**
 ```Estimated diameter: {} meters
 Potentially hazardous? {}
-Close approach date : {}
+Close approach date: {}
 Velocity: {}mph
-Miss distance: {} meters```"""
+Distance from earth on miss: {} meters```"""
 
 # Word cloud
 word_dict = {}
 
+async def get_overview():
+    async with aiohttp.get(overview_link.format(api_key)) as info:
+        ov_parsed = await info.json()
+
+    NEO_count = ov_parsed["near_earth_object_count"]
+    latest_upd = ov_parsed["last_updated"]
+    return [NEO_count, latest_upd]
+
 async def get_NEOs():
+    count_updt = await get_overview()
+
     current_dates = []
     now = datetime.datetime.now()
     today_date = now.strftime("%Y-%m-%d")
@@ -202,7 +215,7 @@ async def get_NEOs():
     velocity = NEO_parsed["near_earth_objects"][info_date][0]["close_approach_data"][0]["relative_velocity"]["miles_per_hour"]
     miss_distance = NEO_parsed["near_earth_objects"][info_date][0]["close_approach_data"][0]["miss_distance"]["miles"]
 
-    return NEO_text.format(name, est_diameter, haz, close_approach_date, velocity, miss_distance)
+    return NEO_text.format(count_updt[1], count_updt[0], name, est_diameter, haz, close_approach_date, velocity, miss_distance)
 
 async def analyse(words):
     for word in words.split(" "):  # Splits the sentence into separate words
