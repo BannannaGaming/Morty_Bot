@@ -5,20 +5,22 @@ from sympy import *
 import matplotlib
 import wikipedia
 import platform
+import datetime
 import aiohttp
 import discord
 import random
+import json
 import os
 matplotlib.use('Agg')  #  http://stackoverflow.com/a/41431428
 import matplotlib.pyplot as plt
-
 
 # Most send's have [:2000] to prevent going over message length limit
 
 # https://gist.github.com/hzsweers/8595628
 # Get env variable(s) from Heroku
 discord_token = os.environ["morty_discord_token"]
-api_key = os.environ["yt_key"]
+yt_api_key = os.environ["yt_key"]
+nasa_api_key = os.environ["nasa_key"]
 
 client = discord.Client()
 
@@ -60,6 +62,8 @@ help_message = """
     • Get a random Rick and Morty quote
   • `!big`
     • Make text bigger
+  • `!NEO`
+    • Get the closest near earth object (uses NASA API)
   • `!wc`
     • Create a word cloud from all messages sent on this server `[only DGI server supported]`
   • `!info`
@@ -158,9 +162,45 @@ big_dict = {
     "9":":clock9:",
 }
 
+# NASA
+NEO_link = "https://api.nasa.gov/neo/rest/v1/feed?start_date={}&api_key={}"
+overview_link = "https://api.nasa.gov/neo/rest/v1/stats?&api_key={}"
+NEO_text = """
+Name: {}
+Estimated diameter: {} meters
+Potentially hazardous? {}
+Close approach date : {}
+Velocity: {}mph
+Miss distance: {} meters"""
 
 # Word cloud
 word_dict = {}
+
+async def get_NEOs():
+    current_dates = []
+    now = datetime.datetime.now()
+    today_date = now.strftime("%Y-%m-%d")
+
+    async with aiohttp.get(NEO_link.format(today_date, nasa_api_key)) as info:
+        NEO_parsed = await info.json()
+
+    for date in NEO_parsed["near_earth_objects"]:
+        current_dates.append(date)
+    if today_date in current_dates:
+        info_date = str(today_date)
+    else:
+        info_date = str(min(current_dates))
+
+    name = NEO_parsed["near_earth_objects"][info_date][0]["name"]
+    diameter_min = NEO_parsed["near_earth_objects"][info_date][0]["estimated_diameter"]["meters"]["estimated_diameter_min"]
+    diameter_max = NEO_parsed["near_earth_objects"][info_date][0]["estimated_diameter"]["meters"]["estimated_diameter_max"]
+    est_diameter = diameter_max - diameter_min
+    haz = NEO_parsed["near_earth_objects"][info_date][0]["is_potentially_hazardous_asteroid"]
+    close_approach_date = NEO_parsed["near_earth_objects"][info_date][0]["close_approach_data"][0]["close_approach_date"]
+    velocity = NEO_parsed["near_earth_objects"][info_date][0]["close_approach_data"][0]["relative_velocity"]["miles_per_hour"]
+    miss_distance = NEO_parsed["near_earth_objects"][info_date][0]["close_approach_data"][0]["miss_distance"]["miles"]
+
+    return NEO_text.format(name, est_diameter, haz, close_approach_date, velocity, miss_distance)
 
 async def analyse(words):
     for word in words.split(" "):  # Splits the sentence into separate words
@@ -334,6 +374,9 @@ async def on_message(message):
             ud_word = message.content.split(" ", 1)[1]
             ud_to_send = await get_urban_def(ud_word)
             await client.send_message(message.channel, ud_to_send[:2000])
+
+        elif message.content.lower().startswith("!NEO "):
+            await client.send_message(message.channel, get_NEOs())
 
         elif message.content.lower().startswith("!big "):
             words_to_big = message.content.split(" ", 1)[1]
