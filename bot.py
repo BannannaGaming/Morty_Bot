@@ -37,6 +37,8 @@ define_word_url = "http://api.pearson.com/v2/dictionaries/laes/entries?headword=
 
 # Help message
 help_message = """
+`Commands not case sensetive`
+
 • **Search**
   • `!urban`  `word or phrase`
     • Search and show a definition and example from urbandictionary
@@ -375,7 +377,7 @@ async def on_message(message):
             ud_to_send = await get_urban_def(ud_word)
             await client.send_message(message.channel, ud_to_send[:2000])
 
-        elif message.content.lower().startswith("!NEO"):
+        elif message.content.lower().startswith("!neo"):
             nasa_to_send = get_NEOs()
             await client.send_message(message.channel, nasa_to_send)
 
