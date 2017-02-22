@@ -378,7 +378,7 @@ async def on_message(message):
             await client.send_message(message.channel, ud_to_send[:2000])
 
         elif message.content.lower().startswith("!neo"):
-            nasa_to_send = get_NEOs()
+            nasa_to_send = await get_NEOs()
             await client.send_message(message.channel, nasa_to_send)
 
         elif message.content.lower().startswith("!big "):
