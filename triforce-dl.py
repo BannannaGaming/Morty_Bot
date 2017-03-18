@@ -21,8 +21,9 @@ def my_hook(d):
         print("Finished downloading")
 
 ydl_opts = {
-    'logger': MyLogger(),
-    'progress_hooks': [my_hook],
+    "format": "worstvideo",
+    "logger": MyLogger(),
+    "progress_hooks": [my_hook],
 }
 
 def get_video_links(url):
