@@ -1,1 +1,1 @@
-worker: python triforce-dl.py
+worker: python bot.py
