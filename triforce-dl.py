@@ -57,7 +57,6 @@ for video_link in videos:
 
 print("\n--stat--\n")
 import os
-a = os.system("ls")
-print(a)
-b = os.system("ls -l 'Triforce! #1 - Sell Your Kids-ZTbkHTE4Jmo.mp4'")
+os.system("ls")
+b = os.system("ls -l 'Triforce! #1 - Sell Your Kids-ZTbkHTE4Jmo.webm'")
 print(b)
