@@ -6,5 +6,4 @@ urbandictionary==1.1
 wordcloud==1.2.1
 matplotlib==1.5.3
 Pillow==3.2.0
-pydub==0.18.0
-pytube==6.1.11
+youtube-dl==2017.3.16
