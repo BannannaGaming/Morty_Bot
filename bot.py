@@ -199,9 +199,9 @@ async def on_message(message):
             num1 = ran_str.split(",")[0]
             num2 = ran_str.split(",")[1]
             try:
-                die = random.randint(str(num1), str(num2))
+                die = random.randint(int(num1), int(num2))
                 await client.send_message(message.channel, "{} rolled {}".format(user, die))
-            except ValueError:
+            except (ValueError, TypeError):
                 await client.send_message(message.channel, "Invalid number(s)")
 
         elif message.content.lower().startswith("!quote"):
