@@ -1,188 +1,32 @@
 from platform import python_version
 from wordcloud import WordCloud
 import urbandictionary as ud
-from sympy import *
 import matplotlib
 import wikipedia
-import platform
 import datetime
 import aiohttp
 import discord
 import random
 import json
-import os
+import var
 matplotlib.use('Agg')  #  http://stackoverflow.com/a/41431428
 import matplotlib.pyplot as plt
 
 # Most send's have [:2000] to prevent going over message length limit
 
-# https://gist.github.com/hzsweers/8595628
-# Get env variable(s) from Heroku
-discord_token = os.environ["morty_discord_token"]
-yt_api_key = os.environ["yt_key"]
-nasa_api_key = os.environ["nasa_key"]
-
 client = discord.Client()
-
-# sympy math things
-x, y, a, b, z = symbols("x y a b z")
 
 # Quotes
 with open ("quotes.txt", "r") as f:
     block_text = f.read()
     quotes = block_text.split("\n\n")
 
-# Dictionary api
-define_word_url = "http://api.pearson.com/v2/dictionaries/laes/entries?headword={}&limit=1"
-
-# Help message
-help_message = """
-`Commands not case sensetive`
-
-• **Search**
-  • `!urban`  `word or phrase`
-    • Search and show a definition and example from urbandictionary
-  • `!wiki`  `wikipedia page, such as "Star Wars"`
-    • Search and show a snippet of a given wikipedia page
-  • `!define`  `word`
-    • Search and show a definition of the given word
-  • `!ph` `search term`
-    • :wink:
-
-• **Maths**
-  • `!solve`  `equation to solve`
-    • Solve an equation such as `(x**2+7)*(x+1)` *(must only use x,y,a,b,z)*
-
-• **Misc**
-  • `!coinflip`
-    • Heads or tails!
-  • `!roll`
-    • Returns a random number between 1 & 6
-  • `!choice`  `Comma,Seperated,List,Of,Choices`
-    • Pick a value from a given list of choices
-  • `!quote`
-    • Get a random Rick and Morty quote
-  • `!big`
-    • Make text bigger
-  • `!neo`
-    • Get the closest near earth object (uses NASA API)
-  • `!wc`
-    • Create a word cloud from all messages sent on this server `[only DGI server supported]`
-  • `!info`
-    • Get information about this bot
-  • `!help`
-    • Shows this menu
-
-• **Bot Owner**
-  • `!ping`
-  • `!erasedict`
-  • `!listservers`
-"""
-
-# Urban dictionary message
-ud_msg = """
-**{}**
-```{}```
-***Example***
-```{}```"""
-
-# Wikipedia message
-wiki_msg = "**{}** - `{}`\n```{}```"
-
-# Definition message
-define_msg = "**{}**\n```{}```"
-
-# Multi-line code block
-info_text = """
-```
-- - - - Info - - - -
-Python Version : {}
-API Version    : {}
-Platform       : {}
-- - - -  --  - - - -
-```
-Add me to another server : http://bit.ly/Morty-bot
-Test me on my own server : https://www.discord.gg/kDE7HJy
-My source code : https://github.com/thatguywiththatname/Morty_Bot
-""".format(python_version(),
-           discord.__version__,
-           platform.system())
-
- # http://www.hubtraffic.com
-ph = "http://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&ordering=mostviewed&period=weekly&thumbsize=small&search={}"
-
-# Python because colours
-ph_text = """
-**{}**
-```python
-Views    : {}
-Rating   : {}
-Duration : {}```
-{}
-"""
-
-# BIGGGG
-big_dict = {
-    "a":":regional_indicator_a:",
-    "b":":regional_indicator_b:",
-    "c":":regional_indicator_c:",
-    "d":":regional_indicator_d:",
-    "e":":regional_indicator_e:",
-    "f":":regional_indicator_f:",
-    "g":":regional_indicator_g:",
-    "h":":regional_indicator_h:",
-    "i":":regional_indicator_i:",
-    "j":":regional_indicator_j:",
-    "k":":regional_indicator_k:",
-    "l":":regional_indicator_l:",
-    "m":":regional_indicator_m:",
-    "n":":regional_indicator_n:",
-    "o":":regional_indicator_o:",
-    "p":":regional_indicator_p:",
-    "q":":regional_indicator_q:",
-    "r":":regional_indicator_r:",
-    "s":":regional_indicator_s:",
-    "t":":regional_indicator_t:",
-    "u":":regional_indicator_u:",
-    "v":":regional_indicator_v:",
-    "w":":regional_indicator_w:",
-    "x":":regional_indicator_x:",
-    "y":":regional_indicator_y:",
-    "z":":regional_indicator_z:",
-    "!":":exclamation:",
-    "*":":asterisk:",
-    "?":":question:",
-    "#":":hash:",
-    "1":":clock1:",
-    "2":":clock2:",
-    "3":":clock3:",
-    "4":":clock4:",
-    "5":":clock5:",
-    "6":":clock6:",
-    "7":":clock7:",
-    "8":":clock8:",
-    "9":":clock9:",
-}
-
-# NASA
-NEO_link = "https://api.nasa.gov/neo/rest/v1/feed?start_date={}&api_key={}"
-NEO_text = """
-**Near Earth Object - Name: {}**
-```Estimated diameter          | {} meters
-Potentially hazardous?      | {}
-Close approach date         | {}
-Velocity                    | {}mph
-Distance from earth on miss | {} meters```"""
-
-# Word cloud
-word_dict = {}
-
 async def get_NEOs():
     current_dates = []
     now = datetime.datetime.now()
     today_date = now.strftime("%Y-%m-%d")
 
-    async with aiohttp.get(NEO_link.format(today_date, nasa_api_key)) as info:
+    async with aiohttp.get(var.NEO_link.format(today_date, var.nasa_api_key)) as info:
         NEO_parsed = await info.json()
 
     for date in NEO_parsed["near_earth_objects"]:
@@ -201,21 +45,23 @@ async def get_NEOs():
     velocity = NEO_parsed["near_earth_objects"][info_date][0]["close_approach_data"][0]["relative_velocity"]["miles_per_hour"]
     miss_distance = NEO_parsed["near_earth_objects"][info_date][0]["close_approach_data"][0]["miss_distance"]["miles"]
 
-    return NEO_text.format(name, est_diameter, haz, close_approach_date, velocity, miss_distance)
+    return var.NEO_text.format(name, est_diameter, haz, close_approach_date, velocity, miss_distance)
 
 async def analyse(words):
     for word in words.split(" "):  # Splits the sentence into separate words
-        if word not in word_dict: word_dict[word] = 1
-        else:                     word_dict[word] += 1
+        if word not in var.word_dict:
+            var.word_dict[word] = 1
+        else:
+            var.word_dict[word] += 1
 
 async def create_wordcloud():
-    if word_dict == {}:
+    if var.word_dict == {}:
         return "no words"
 
     alltext = ""  # Easier for wordcloud to read from 1 string
 
-    for word in word_dict:
-        count = word_dict[word]
+    for word in var.word_dict:
+        count = var.word_dict[word]
         alltext += (word+" ")*count
 
     wordcloud = WordCloud().generate(alltext)
@@ -230,7 +76,7 @@ async def dirty_stuff(search_term):
         words.append(word)
 
     # %20 = URL formatting
-    async with aiohttp.get(ph.format("%20".join(words))) as info:
+    async with aiohttp.get(var.ph.format("%20".join(words))) as info:
         ph_link = await info.json()
 
     try:
@@ -239,7 +85,7 @@ async def dirty_stuff(search_term):
         rating = ph_link["videos"][0]["rating"]
         dur = ph_link["videos"][0]["duration"]
         link = ph_link["videos"][0]["url"]
-        return ph_text.format(title, views, rating, dur, link)
+        return var.ph_text.format(title, views, rating, dur, link)
 
     except (IndexError, KeyError):
         return "{} cannot be found".format(word)
@@ -248,7 +94,7 @@ async def dirty_stuff(search_term):
 async def search_wiki(search_req):
     try:
         page = wikipedia.page(search_req)
-        wiki_def = wiki_msg.format(page.title, page.url, page.content[:1000])
+        wiki_def = var.wiki_msg.format(page.title, page.url, page.content[:1000])
         return wiki_def
 
     except wikipedia.exceptions.PageError:
@@ -265,18 +111,18 @@ async def get_urban_def(word):
             ud_name =  d.word
             ud_definition = d.definition
             ud_example = d.example
-        return ud_msg.format(ud_name, ud_definition, ud_example)
+        return var.ud_msg.format(ud_name, ud_definition, ud_example)
 
     except NameError:
         return "Word not located in urban dictionary"
 
 
 async def get_definition(word):  # Buggy
-    async with aiohttp.get(define_word_url.format(word)) as info:
+    async with aiohttp.get(var.define_word_url.format(word)) as info:
         word_info = await info.json()
     try:
         definition = word_info["results"][0]["senses"][0]["definition"]  # Weird format
-        defined = define_msg.format(word, definition[0])
+        defined = var.define_msg.format(word, definition[0])
         return defined
 
     except IndexError:
@@ -288,7 +134,7 @@ async def big(words):
     for word in words.split(" "):
         for letter in word.lower():
             try:
-                output.append(big_dict[letter])
+                output.append(var.big_dict[letter])
             except KeyError:
                 output.append(letter)
 
@@ -313,8 +159,8 @@ async def on_message(message):
             print("Message server: {}".format(message.server))
 
         elif message.content.lower().lower().startswith("!erasedict") and user == "<@263412940869206027>":
-            word_dict = {}
-            await client.send_message(message.channel, "`word_dict` reset")
+            var.word_dict = {}
+            await client.send_message(message.channel, "`var.word_dict` reset")
 
         elif message.content.lower().lower().startswith("!listservers") and user == "<@263412940869206027>":
             servers = []
@@ -341,6 +187,23 @@ async def on_message(message):
             choice = random.randint(0, len(choices)-1)
             await client.send_message(message.channel, "I choose: {}".format(choices[choice]))
 
+        elif message.content.lower().startswith("!yn "):
+            yn = random.randint(1, 2)
+            if yn == 1:
+                await client.send_message(message.channel, "Yes")
+            else:
+                await client.send_message(message.channel, "No")
+
+        elif message.content.lower().startswith("!numgen "):
+            ran_str = message.content.split(" ", 1)[1]
+            num1 = ran_str.split(",")[0]
+            num2 = ran_str.split(",")[1]
+            try:
+                die = random.randint(str(num1), str(num2))
+                await client.send_message(message.channel, "{} rolled {}".format(user, die))
+            except ValueError:
+                await client.send_message(message.channel, "Invalid number(s)")
+
         elif message.content.lower().startswith("!quote"):
                 choice = random.randint(0, len(quotes)-1)
                 await client.send_message(message.channel, quotes[choice])
@@ -352,14 +215,6 @@ async def on_message(message):
             search_req = message.content.split(" ", 1)[1]
             wiki_to_send = await search_wiki(search_req)
             await client.send_message(message.channel, wiki_to_send)
-
-        elif message.content.lower().startswith("!solve "):  # Needs improving
-            eq = message.content.split(" ", 1)[1]
-            try:
-                solved = solve(eq)
-                await client.send_message(message.channel, str(solved))
-            except (NameError, TypeError):  # Doesent always catch? Testing needed
-                await client.send_message(message.channel, "Incorrectly formatted request")
 
         elif message.content.lower().startswith("!define "):
             word = message.content.split(" ", 1)[1]
@@ -387,10 +242,10 @@ async def on_message(message):
             await client.send_message(message.channel, big_to_send)
 
         elif message.content.lower().startswith("!info"):
-            await client.send_message(message.channel, info_text)
+            await client.send_message(message.channel, var.info_text)
 
         elif message.content.lower().startswith("!help"):
-            await client.send_message(message.channel, help_message)
+            await client.send_message(message.channel, var.help_message)
 
         elif message.content.lower().startswith("!wc"):
             await client.send_message(message.channel, "Creating wordcloud...")
@@ -411,4 +266,4 @@ async def on_ready():
     await client.change_presence(game=discord.Game(name="with Rick <3"))
 
 
-client.run(discord_token)
+client.run(var.discord_token)
