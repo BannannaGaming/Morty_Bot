@@ -24,6 +24,10 @@ help_message = """
     • Heads or tails!
   • `!roll`
     • Returns a random number between 1 & 6
+  • `!numgen` `num1`,`num2`
+    • Returns a random number between num1 & num2
+  • `!yn`
+    • Returns `Yes` or `No`
   • `!choice`  `Comma,Seperated,List,Of,Choices`
     • Pick a value from a given list of choices
   • `!quote`

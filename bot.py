@@ -150,7 +150,8 @@ async def on_message(message):
         user = "{0.author.mention}".format(message)  # Get user mention
 
     try:
-        await analyse(message.content)
+        if user != "<@275050313529032706>" and user != "<@159985870458322944>":
+            await analyse(message.content)  # For word cloud
 
         # Admin commands
 
