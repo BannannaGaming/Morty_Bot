@@ -157,16 +157,14 @@ async def on_message(message):
 
         if message.content.lower().lower().startswith("!ping") and user == "<@263412940869206027>":
             await client.send_message(message.channel, "pong")
-            print("Message server: {}".format(message.server))
+            print("Ping from server: {}".format(message.server))
 
         elif message.content.lower().lower().startswith("!erasedict") and user == "<@263412940869206027>":
             var.word_dict = {}
             await client.send_message(message.channel, "`var.word_dict` reset")
 
         elif message.content.lower().lower().startswith("!listservers") and user == "<@263412940869206027>":
-            servers = []
-            for server in client.servers:
-                servers.append(server)
+            servers = [server.name for server in client.servers]
             await client.send_message(message.channel, servers)
 
         # Other commands
