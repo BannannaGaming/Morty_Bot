@@ -60,7 +60,7 @@ async def analyse(words):
 async def create_wordcloud():
     with open("wcf.txt", "r") as wcf:
         var.word_dict = eval(wcf.read())
-    
+
     if var.word_dict == {}:
         return "no words"
 
@@ -270,9 +270,4 @@ async def on_ready():
     print("Logged in as\n{}\n{}\n------".format(client.user.name, client.user.id))
     await client.change_presence(game=discord.Game(name="with Rick <3"))
 
-
 client.run(var.discord_token)
-
-# Do stuff when program ends?
-print("Bot program ending")
-wcf.close()
