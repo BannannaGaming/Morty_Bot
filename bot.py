@@ -9,7 +9,7 @@ import discord
 import random
 import json
 import var
-matplotlib.use('Agg')  #  http://stackoverflow.com/a/41431428
+matplotlib.use("Agg")  #  http://stackoverflow.com/a/41431428
 import matplotlib.pyplot as plt
 
 # Most send's have [:2000] to prevent going over message length limit
@@ -53,8 +53,13 @@ async def analyse(words):
             var.word_dict[word] = 1
         else:
             var.word_dict[word] += 1
+    # Wordcloud log
+    with open ("wcf.txt", "w") as f:
+        f.write(str(var.word_dict))
 
 async def create_wordcloud():
+    var.word_dict = eval(open("wcf.txt", "r").read())
+    
     if var.word_dict == {}:
         return "no words"
 
@@ -266,3 +271,7 @@ async def on_ready():
 
 
 client.run(var.discord_token)
+
+# Do stuff when program ends?
+print("Bot program ending")
+wcf.close()
