@@ -58,7 +58,8 @@ async def analyse(words):
         f.write(str(var.word_dict))
 
 async def create_wordcloud():
-    var.word_dict = eval(open("wcf.txt", "r").read())
+    with open("wcf.txt", "r") as wcf:
+        var.word_dict = eval(wcf.read())
     
     if var.word_dict == {}:
         return "no words"
