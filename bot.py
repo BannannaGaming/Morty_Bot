@@ -1,3 +1,8 @@
+"""
+This code sucks, you know it and I know it.
+Move on and call me an idiot later.
+"""
+
 from platform import python_version
 from wordcloud import WordCloud
 import urbandictionary as ud
@@ -144,7 +149,8 @@ async def big(words):
             except KeyError:
                 output.append(letter)
 
-        output.append(" ")
+        # 2 spaces at request of Sam
+        output.append("  ")
     return output
 
 
