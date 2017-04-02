@@ -26,6 +26,7 @@ with open ("quotes.txt", "r") as f:
     block_text = f.read()
     quotes = block_text.split("\n\n")
 
+
 async def get_NEOs():
     current_dates = []
     now = datetime.datetime.now()
@@ -163,7 +164,8 @@ async def reset_dict():
 async def showdict():
     with open("wcf.txt", "r") as wcf:
         var.word_dict = eval(wcf.read())
-    print(var.word_dict)
+    for key, value in var.word_dict.items():
+        print(str(key)+" : "+str(value))
 
 
 @client.event
@@ -174,24 +176,25 @@ async def on_message(message):
         user = "{0.author.mention}".format(message)  # Get user mention
 
     try:
+        # Not Morty_Bot or Mee6 (check for Morty_Bot is useless but whatever)
         if user != "<@275050313529032706>" and user != "<@159985870458322944>":
             await analyse(message.content)  # For word cloud
 
-        # Admin commands
+        # Bot owner / admin commands
 
-        if message.content.lower().lower().startswith("!ping") and user == "<@263412940869206027>":
+        if message.content.lower().lower().startswith("!ping") and user in var.admins:
             await client.send_message(message.channel, "pong")
             print("Ping from server: {}".format(message.server))
 
-        elif message.content.lower().lower().startswith("!erasedict") and user == "<@263412940869206027>":
+        elif message.content.lower().lower().startswith("!erasedict") and user in var.admins:
             await reset_dict()
             await client.send_message(message.channel, "`var.word_dict` reset")
 
-        elif message.content.lower().lower().startswith("!listservers") and user == "<@263412940869206027>":
+        elif message.content.lower().lower().startswith("!listservers") and user in var.admins:
             servers = [server.name for server in client.servers]
-            await client.send_message(message.channel, ",".join(servers))
+            await client.send_message(message.channel, ", ".join(servers))
 
-        elif message.content.lower().lower().startswith("!showdict") and user == "<@263412940869206027>":
+        elif message.content.lower().lower().startswith("!showdict") and user in var.admins:
             await showdict()
             await client.send_message(message.channel, "Printed to heroku log")
 
