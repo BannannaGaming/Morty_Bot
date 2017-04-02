@@ -154,6 +154,18 @@ async def big(words):
     return output
 
 
+async def reset_dict():
+    var.word_dict = {}
+    with open ("wcf.txt", "w") as f:
+        f.write(str(var.word_dict))
+
+
+async def showdict():
+    with open("wcf.txt", "r") as wcf:
+        var.word_dict = eval(wcf.read())
+    print(var.word_dict)
+
+
 @client.event
 async def on_message(message):
     if message.author == client.user:  # Don't reply to self
@@ -172,12 +184,16 @@ async def on_message(message):
             print("Ping from server: {}".format(message.server))
 
         elif message.content.lower().lower().startswith("!erasedict") and user == "<@263412940869206027>":
-            var.word_dict = {}
+            await reset_dict()
             await client.send_message(message.channel, "`var.word_dict` reset")
 
         elif message.content.lower().lower().startswith("!listservers") and user == "<@263412940869206027>":
             servers = [server.name for server in client.servers]
-            await client.send_message(message.channel, servers)
+            await client.send_message(message.channel, ",".join(servers))
+
+        elif message.content.lower().lower().startswith("!showdict") and user == "<@263412940869206027>":
+            await showdict()
+            await client.send_message(message.channel, "Printed to heroku log")
 
         # Other commands
 
@@ -266,8 +282,8 @@ async def on_message(message):
             else:
                 await client.send_message(message.channel, "No words!")
 
-    except NameError:  # (ValueError, IndexError, NameError, TypeError)
-        print("Something went wrong :(")  # Debugging
+    except (ValueError, IndexError, NameError, TypeError):
+        print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
 
 

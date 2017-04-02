@@ -47,6 +47,7 @@ help_message = """
   • `!ping`
   • `!erasedict`
   • `!listservers`
+  • `!showdict`
 """
 
 # Urban dictionary message
