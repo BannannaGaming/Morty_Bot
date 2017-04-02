@@ -164,6 +164,7 @@ async def reset_dict():
 async def showdict():
     with open("wcf.txt", "r") as wcf:
         var.word_dict = eval(wcf.read())
+    print("Printing var.word_dict")
     for key, value in var.word_dict.items():
         print(str(key)+" : "+str(value))
 
