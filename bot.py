@@ -1,12 +1,11 @@
 """
 This code sucks, you know it and I know it.
+Async is hard...
 Move on and call me an idiot later.
 """
 
-from platform import python_version
-from wordcloud import WordCloud
+from datetime import datetime as dt
 import urbandictionary as ud
-import matplotlib
 import wikipedia
 import datetime
 import aiohttp
@@ -14,8 +13,6 @@ import discord
 import random
 import json
 import var
-matplotlib.use("Agg")  #  http://stackoverflow.com/a/41431428
-import matplotlib.pyplot as plt
 
 # Most send's have [:2000] to prevent going over message length limit
 
@@ -53,33 +50,6 @@ async def get_NEOs():
 
     return var.NEO_text.format(name, est_diameter, haz, close_approach_date, velocity, miss_distance)
 
-async def analyse(words):
-    for word in words.split(" "):  # Splits the sentence into separate words
-        if word not in var.word_dict:
-            var.word_dict[word] = 1
-        else:
-            var.word_dict[word] += 1
-    # Wordcloud log
-    with open ("wcf.txt", "w") as f:
-        f.write(str(var.word_dict))
-
-async def create_wordcloud():
-    with open("wcf.txt", "r") as wcf:
-        var.word_dict = eval(wcf.read())
-
-    if var.word_dict == {}:
-        return "no words"
-
-    alltext = ""  # Easier for wordcloud to read from 1 string
-
-    for word in var.word_dict:
-        count = var.word_dict[word]
-        alltext += (word+" ")*count
-
-    wordcloud = WordCloud().generate(alltext)
-    plt.imshow(wordcloud)
-    plt.axis("off")
-    plt.savefig("wordcloud_fig")  # Always saved as this
 
 # I blame Sam
 async def dirty_stuff(search_term):
@@ -129,12 +99,12 @@ async def get_urban_def(word):
         return "Word not located in urban dictionary"
 
 
-async def get_definition(word):  # Buggy
-    async with aiohttp.get(var.define_word_url.format(word)) as info:
+async def get_definition(words):  # Buggy
+    async with aiohttp.get(var.define_word_url.format("%20".join(words))) as info:
         word_info = await info.json()
     try:
         definition = word_info["results"][0]["senses"][0]["definition"]  # Weird format
-        defined = var.define_msg.format(word, definition[0])
+        defined = var.define_msg.format(words, definition[0])
         return defined
 
     except IndexError:
@@ -155,20 +125,6 @@ async def big(words):
     return output
 
 
-async def reset_dict():
-    var.word_dict = {}
-    with open ("wcf.txt", "w") as f:
-        f.write(str(var.word_dict))
-
-
-async def showdict():
-    with open("wcf.txt", "r") as wcf:
-        var.word_dict = eval(wcf.read())
-    print("Printing var.word_dict")
-    for key, value in var.word_dict.items():
-        print(str(key)+" : "+str(value))
-
-
 @client.event
 async def on_message(message):
     if message.author == client.user:  # Don't reply to self
@@ -177,27 +133,16 @@ async def on_message(message):
         user = "{0.author.mention}".format(message)  # Get user mention
 
     try:
-        # Not Morty_Bot or Mee6 (check for Morty_Bot is useless but whatever)
-        if user != "<@275050313529032706>" and user != "<@159985870458322944>":
-            await analyse(message.content)  # For word cloud
 
         # Bot owner / admin commands
 
-        if message.content.lower().lower().startswith("!ping") and user in var.admins:
+        if message.content.lower().lower().startswith("!ping") and user in var.owner-approved:
             await client.send_message(message.channel, "pong")
             print("Ping from server: {}".format(message.server))
 
-        elif message.content.lower().lower().startswith("!erasedict") and user in var.admins:
-            await reset_dict()
-            await client.send_message(message.channel, "`var.word_dict` reset")
-
-        elif message.content.lower().lower().startswith("!listservers") and user in var.admins:
+        elif message.content.lower().lower().startswith("!listservers") and user in var.owner-approved:
             servers = [server.name for server in client.servers]
             await client.send_message(message.channel, ", ".join(servers))
-
-        elif message.content.lower().lower().startswith("!showdict") and user in var.admins:
-            await showdict()
-            await client.send_message(message.channel, "Printed to heroku log")
 
         # Other commands
 
@@ -272,19 +217,14 @@ async def on_message(message):
             big_to_send = "".join(bigger_words)
             await client.send_message(message.channel, big_to_send)
 
+        elif message.content.lower().startswith("!lads"):
+            await client.send_message(message.channel, var.lads_text)
+
         elif message.content.lower().startswith("!info"):
             await client.send_message(message.channel, var.info_text)
 
         elif message.content.lower().startswith("!help"):
             await client.send_message(message.channel, var.help_message)
-
-        elif message.content.lower().startswith("!wc"):
-            await client.send_message(message.channel, "Creating wordcloud...")
-            response = await create_wordcloud()
-            if response != "no words":
-                await client.send_file(message.channel, "wordcloud_fig.png")#
-            else:
-                await client.send_message(message.channel, "No words!")
 
     except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
@@ -293,7 +233,8 @@ async def on_message(message):
 
 @client.event
 async def on_ready():
-    print("Logged in as\n{}\n{}\n------".format(client.user.name, client.user.id))
+    timestamp = dt.now().strftime("%H:%M")
+    print("Logged in as\n{}\n{}\n@ {}\n------".format(client.user.name, client.user.id, timestamp))
     await client.change_presence(game=discord.Game(name="with Rick <3"))
 
 client.run(var.discord_token)

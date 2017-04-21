@@ -2,7 +2,7 @@ from platform import python_version
 import platform
 import os
 
-admins = ["<@263412940869206027>"]
+owner-approved = ["<@263412940869206027>"]
 
 # Dictionary api
 define_word_url = "http://api.pearson.com/v2/dictionaries/laes/entries?headword={}&limit=1"
@@ -38,8 +38,8 @@ help_message = """
     • Make text bigger
   • `!neo`
     • Get the closest near earth object (uses NASA API)
-  • `!wc`
-    • Create a word cloud from all messages sent on this server `[only DGI server supported]`
+  • `!lads`
+    • Banter
   • `!info`
     • Get information about this bot
   • `!help`
@@ -47,9 +47,7 @@ help_message = """
 
 • **Bot Owner**
   • `!ping`
-  • `!erasedict`
   • `!listservers`
-  • `!showdict`
 """
 
 # Urban dictionary message
@@ -79,7 +77,7 @@ My source code : https://github.com/thatguywiththatname/Morty_Bot
 """.format(python_version(),
            platform.system())
 
- # http://www.hubtraffic.com
+# http://www.hubtraffic.com
 ph = "http://www.pornhub.com/webmasters/search?id=44bc40f3bc04f65b7a35&ordering=mostviewed&period=weekly&thumbsize=small&search={}"
 
 # Python because colours
@@ -145,8 +143,11 @@ Close approach date         | {}
 Velocity                    | {}mph
 Distance from earth on miss | {} meters```"""
 
-# Word cloud
-word_dict = {}
+# Ladssss
+lads_text = """
+Look at these  l a d s
+:simm: :sem: :ricc: :gman: :actuallyhitler: :cammW:
+"""
 
 # https://gist.github.com/hzsweers/8595628
 # Get env variable(s) from Heroku
