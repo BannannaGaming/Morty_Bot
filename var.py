@@ -145,8 +145,8 @@ Distance from earth on miss | {} meters```"""
 
 # Ladssss
 lads_text = """
-Look at these  l a d s
-:simm: :sem: :ricc: :gman: :actuallyhitler: :cammW:
+Look at these l a d s
+<:simm:304715724193005568> <:sem:304711598793293825> <:ricc:304717179071234049> <:gman:304708365614055424> <:actuallyhitler:304719065799327744> <:cammW:304720572158443520>
 """
 
 # https://gist.github.com/hzsweers/8595628

@@ -70,7 +70,7 @@ async def dirty_stuff(search_term):
         return var.ph_text.format(title, views, rating, dur, link)
 
     except (IndexError, KeyError):
-        return "{} cannot be found".format(word)
+        return "{} cannot be found, you sick fuck".format(word)
 
 
 async def search_wiki(search_req):
