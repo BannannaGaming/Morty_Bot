@@ -136,11 +136,11 @@ async def on_message(message):
 
         # Bot owner / admin commands
 
-        if message.content.lower().lower().startswith("!ping") and user in var.owner-approved:
+        if message.content.lower().lower().startswith("!ping") and user in var.owner_approved:
             await client.send_message(message.channel, "pong")
             print("Ping from server: {}".format(message.server))
 
-        elif message.content.lower().lower().startswith("!listservers") and user in var.owner-approved:
+        elif message.content.lower().lower().startswith("!listservers") and user in var.owner_approved:
             servers = [server.name for server in client.servers]
             await client.send_message(message.channel, ", ".join(servers))
 

@@ -2,7 +2,7 @@ from platform import python_version
 import platform
 import os
 
-owner-approved = ["<@263412940869206027>"]
+owner_approved = ["<@263412940869206027>"]
 
 # Dictionary api
 define_word_url = "http://api.pearson.com/v2/dictionaries/laes/entries?headword={}&limit=1"
