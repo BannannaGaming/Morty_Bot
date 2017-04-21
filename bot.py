@@ -56,7 +56,6 @@ async def dirty_stuff(search_term):
     words = []
     for word in search_term.split(" "):
         words.append(word)
-
     # %20 = URL formatting
     async with aiohttp.get(var.ph.format("%20".join(words))) as info:
         ph_link = await info.json()
@@ -68,7 +67,6 @@ async def dirty_stuff(search_term):
         dur = ph_link["videos"][0]["duration"]
         link = ph_link["videos"][0]["url"]
         return var.ph_text.format(title, views, rating, dur, link)
-
     except (IndexError, KeyError):
         return "{} cannot be found, you sick fuck".format(word)
 
@@ -78,10 +76,8 @@ async def search_wiki(search_req):
         page = wikipedia.page(search_req)
         wiki_def = var.wiki_msg.format(page.title, page.url, page.content[:1000])
         return wiki_def
-
     except wikipedia.exceptions.PageError:
         return "That does not match any Wikipedia pages"
-
     except wikipedia.exceptions.DisambiguationError:
         return "Multiple results found, try something else"
 
@@ -94,7 +90,6 @@ async def get_urban_def(word):
             ud_definition = d.definition
             ud_example = d.example
         return var.ud_msg.format(ud_name, ud_definition, ud_example)
-
     except NameError:
         return "Word not located in urban dictionary"
 
@@ -106,7 +101,6 @@ async def get_definition(words):  # Buggy
         definition = word_info["results"][0]["senses"][0]["definition"]  # Weird format
         defined = var.define_msg.format(words, definition[0])
         return defined
-
     except IndexError:
         return "{} cannot be found".format(word)
 
@@ -119,7 +113,6 @@ async def big(words):
                 output.append(var.big_dict[letter])
             except KeyError:
                 output.append(letter)
-
         # 2 spaces at request of Sam
         output.append("  ")
     return output
@@ -133,7 +126,6 @@ async def on_message(message):
         user = "{0.author.mention}".format(message)  # Get user mention
 
     try:
-
         # Bot owner / admin commands
 
         if message.content.lower().lower().startswith("!ping") and user in var.owner_approved:
@@ -222,7 +214,7 @@ async def on_message(message):
 
         elif message.content.lower().startswith("!holdon"):
             with open("holdon.png", "rb") as sendfile:
-                await client.send_file(channel, sendfile)
+                await client.send_file(message.channel, sendfile)
 
         elif message.content.lower().startswith("!info"):
             await client.send_message(message.channel, var.info_text)
