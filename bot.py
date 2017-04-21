@@ -80,7 +80,7 @@ async def search_wiki(search_req):
         return wiki_def
 
     except wikipedia.exceptions.PageError:
-        return  "That does not match any Wikipedia pages"
+        return "That does not match any Wikipedia pages"
 
     except wikipedia.exceptions.DisambiguationError:
         return "Multiple results found, try something else"
@@ -219,6 +219,10 @@ async def on_message(message):
 
         elif message.content.lower().startswith("!lads"):
             await client.send_message(message.channel, var.lads_text)
+
+        elif message.content.lower().startswith("!holdon"):
+            with open("holdon.png", "rb") as sendfile:
+                await client.send_file(channel, sendfile)
 
         elif message.content.lower().startswith("!info"):
             await client.send_message(message.channel, var.info_text)

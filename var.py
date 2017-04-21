@@ -40,6 +40,8 @@ help_message = """
     • Get the closest near earth object (uses NASA API)
   • `!lads`
     • Banter
+  • `!holdon`
+    • Bitch, hold on
   • `!info`
     • Get information about this bot
   • `!help`
