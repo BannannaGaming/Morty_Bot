@@ -216,6 +216,10 @@ async def on_message(message):
             with open("holdon.png", "rb") as sendfile:
                 await client.send_file(message.channel, sendfile)
 
+        elif message.content.lower().startswith("!roasted"):
+            with open("roastcard.png", "rb") as sendfile:
+                await client.send_file(message.channel, sendfile)
+
         elif message.content.lower().startswith("!info"):
             await client.send_message(message.channel, var.info_text)
 
