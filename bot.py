@@ -24,7 +24,7 @@ with open("quotes.txt", "r") as f:
     quotes = block_text.split("\n\n")
 
 # Insults/Roasts
-with open("roasts.txt"m "r") as f:
+with open("roasts.txt", "r") as f:
     block_text = f.read()
     insults = block_text.split("\n\n")
 
