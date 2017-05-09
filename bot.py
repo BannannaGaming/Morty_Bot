@@ -19,10 +19,14 @@ import var
 client = discord.Client()
 
 # Quotes
-with open ("quotes.txt", "r") as f:
+with open("quotes.txt", "r") as f:
     block_text = f.read()
     quotes = block_text.split("\n\n")
 
+# Insults/Roasts
+with open("roasts.txt"m "r") as f:
+    block_text = f.read()
+    insults = block_text.split("\n\n")
 
 async def get_NEOs():
     current_dates = []
@@ -173,8 +177,14 @@ async def on_message(message):
                 await client.send_message(message.channel, "Invalid number(s)")
 
         elif message.content.lower().startswith("!quote"):
-                choice = random.randint(0, len(quotes)-1)
-                await client.send_message(message.channel, quotes[choice])
+            choice = random.randint(0, len(quotes)-1)
+            await client.send_message(message.channel, quotes[choice])
+
+        elif message.content.lower().startwith("!insult "):
+            choice = random.randint(0, len(insults)-1)
+            user = message.content.split(" ", 1)[1]
+            insult_text = "{} {}".format(user, insults[choice])
+            await client.send_message(message.channel, insult_text)
 
         elif message.content.lower().startswith("!kys"):
             await client.send_message(message.channel, "I agree, :regional_indicator_k: :regional_indicator_y: :regional_indicator_s:")
