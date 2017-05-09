@@ -183,7 +183,7 @@ async def on_message(message):
         elif message.content.lower().startswith("!insult "):
             choice = random.randint(0, len(insults)-1)
             user = message.content.split(" ", 1)[1]
-            insult_text = "{} {}".format(user, insults[choice])
+            insult_text = "{}{}".format(user, insults[choice])
             await client.send_message(message.channel, insult_text)
 
         elif message.content.lower().startswith("!kys"):
