@@ -48,7 +48,7 @@ help_message = """
 • **Misc**
   • `!quote`
     • Get a random Rick and Morty quote
-  • `!big`
+  • `!big` `text to make bigger`
     • Make text bigger
   • `!insult` `name`
     • Insult someone
