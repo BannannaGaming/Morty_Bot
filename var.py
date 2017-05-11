@@ -21,7 +21,19 @@ help_message = """
   • `!ph` `search term`
     • :wink:
 
-• **Misc**
+• **Memes**
+  • `!holdon`
+    • Bitch, hold on
+  • `!roasted`
+    • https://youtu.be/_tWC5qtfby4
+  • `!lads`
+    • Banter
+
+• **Information**
+  • `!neo`
+    • Get the closest near earth object (uses NASA API)
+
+• **Random Selection**
   • `!coinflip`
     • Heads or tails!
   • `!roll`
@@ -32,16 +44,14 @@ help_message = """
     • Returns `Yes` or `No`
   • `!choice`  `Comma,Seperated,List,Of,Choices`
     • Pick a value from a given list of choices
+
+• **Misc**
   • `!quote`
     • Get a random Rick and Morty quote
   • `!big`
     • Make text bigger
-  • `!neo`
-    • Get the closest near earth object (uses NASA API)
-  • `!lads`
-    • Banter
-  • `!holdon`
-    • Bitch, hold on
+  • `!insult` `name`
+    • Insult someone
   • `!info`
     • Get information about this bot
   • `!help`

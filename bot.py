@@ -139,6 +139,7 @@ async def on_message(message):
         elif message.content.lower().lower().startswith("!listservers") and user in var.owner_approved:
             servers = [server.name for server in client.servers]
             await client.send_message(message.channel, ", ".join(servers))
+            print("listservers from server: {}".format(message.server))
 
         # Other commands
 
