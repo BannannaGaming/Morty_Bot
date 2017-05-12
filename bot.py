@@ -142,8 +142,8 @@ async def on_message(message):
 
         elif message.content.lower().startswith("!start"):
 
-            if not discord.opus.is_loaded():
-                discord.opus.load_opus()
+            #if not discord.opus.is_loaded():
+            #    discord.opus.load_opus()
 
             test_url = "https://www.youtube.com/watch?v=LdPyYze2NIA"
 
