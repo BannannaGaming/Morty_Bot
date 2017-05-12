@@ -33,7 +33,7 @@ async def on_message(message):
 
     try:
         global voice, player
-        
+
         # Bot owner / admin commands
         if message.content.lower().lower().startswith("!ping") and user in var.owner_approved:
             await client.send_message(message.channel, "pong")
@@ -143,8 +143,10 @@ async def on_message(message):
 
 
         elif message.content.lower().startswith("!start"):
-            # if not discord.opus.is_loaded():
-            #     discord.opus.load_opus()
+            print("Loading opus...")
+            if not discord.opus.is_loaded():
+                discord.opus.load_opus()
+            print("Loaded!")
 
             test_url = "https://www.youtube.com/watch?v=LdPyYze2NIA"
 
