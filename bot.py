@@ -137,6 +137,15 @@ async def on_message(message):
         elif message.content.lower().startswith("!help"):
             await client.send_message(message.channel, var.help_message)
 
+        elif message.content.lower().startswith("!start"):
+            test_url = "https://www.youtube.com/watch?v=LdPyYze2NIA"
+            voice = await client.join_voice_channel(message.channel)
+            player = await voice.create_ytdl_player(test_url)
+            player.start()
+
+        elif message.content.lower().startswith("!stop"):
+            player.stop()
+
     except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
