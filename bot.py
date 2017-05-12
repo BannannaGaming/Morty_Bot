@@ -141,8 +141,16 @@ async def on_message(message):
 
 
 
+
+        # - - Working - - #
+
         elif message.content.lower().startswith("!join"):
             voice = await client.join_voice_channel(message.author.voice.voice_channel)
+
+        elif message.content.lower().startswith("!disconnect"):
+            await voice.disconnect()
+
+        # - - Experimental - -#
 
         elif message.content.lower().startswith("!play "):
             youtube_url = message.content.split(" ", 1)[1]
@@ -162,11 +170,13 @@ async def on_message(message):
             player.start()
 
         elif message.content.lower().startswith("!stop"):
-            player.stop()
+            try:
+                player.stop()
+            except NameError:  # Nothing playing
+                pass
 
-        elif message.content.lower().startswith("!disconnect"):
-            await voice.disconnect()
-
+        # - - END - - #
+        
 
 
 
