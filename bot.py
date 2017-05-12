@@ -145,10 +145,16 @@ async def on_message(message):
         # - - Working - - #
 
         elif message.content.lower().startswith("!join"):
-            voice = await client.join_voice_channel(message.author.voice.voice_channel)
+            try:
+                voice = await client.join_voice_channel(message.author.voice.voice_channel)
+            except discord.errors.ClientException:
+                pass  # Already connected to somewhere
 
-        elif message.content.lower().startswith("!disconnect"):
-            await voice.disconnect()
+        elif message.content.lower().startswith("!leave"):
+            try:
+                await voice.disconnect()
+            except NameError:
+                pass  # Not connected
 
         # - - Experimental - -#
 
@@ -176,7 +182,7 @@ async def on_message(message):
                 pass
 
         # - - END - - #
-        
+
 
 
 
