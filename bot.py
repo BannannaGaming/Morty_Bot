@@ -158,19 +158,27 @@ async def on_message(message):
 
         # - - Experimental - -#
 
+        elif message.content.lower().startswith("!add "):
+            youtube_url = message.content.split(" ", 1)[1]
+            var.youtube_playlist.append(youtube_url)
+            await client.send_message(message.channel, "Added {}\n[playlist not working yet]".format(youtube_url))
+
         elif message.content.lower().startswith("!play "):
             youtube_url = message.content.split(" ", 1)[1]
 
-            OPUS_LIBS = ['libopus-0.dll', 'libopus.so.0', 'libopus.0.dylib', 'libopus.so.1']
+            if player.yt:
+                player.stop()
 
-            if not discord.opus.is_loaded():
-                print("Loading opus...")
-                for opus_name in OPUS_LIBS:
-                    try:
-                        discord.opus.load_opus(opus_name)
-                        print("Loaded: {}".format(opus_name))
-                    except OSError:
-                        print("Cannot load: {}".format(opus_name))
+            # OPUS_LIBS = ['libopus-0.dll', 'libopus.so.0', 'libopus.0.dylib', 'libopus.so.1']
+            #
+            # if not discord.opus.is_loaded():
+            #     print("Loading opus...")
+            #     for opus_name in OPUS_LIBS:
+            #         try:
+            #             discord.opus.load_opus(opus_name)
+            #             print("Loaded: {}".format(opus_name))
+            #         except OSError:
+            #             print("Cannot load: {}".format(opus_name))
 
             player = await voice.create_ytdl_player(youtube_url)
             player.start()
