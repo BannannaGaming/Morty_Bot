@@ -169,9 +169,9 @@ async def on_message(message):
 
 
 
-    # except (ValueError, IndexError, NameError, TypeError):
-    #     print("Something went wrong :(")
-    #     await client.send_message(message.channel, "Something went wrong :cry:")
+    except IOError: #(ValueError, IndexError, NameError, TypeError):
+        print("Something went wrong :(")
+        await client.send_message(message.channel, "Something went wrong :cry:")
 
 @client.event
 async def on_ready():
