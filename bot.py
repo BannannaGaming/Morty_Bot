@@ -142,7 +142,9 @@ async def on_message(message):
 
 
 
-        elif message.content.lower().startswith("!start"):
+        elif message.content.lower().startswith("!start "):
+            youtube_url = message.content.split(" ", 1)[1]
+
             OPUS_LIBS = ['libopus-0.dll', 'libopus.so.0', 'libopus.0.dylib', 'libopus.so.1']
 
             if not discord.opus.is_loaded():
@@ -154,10 +156,8 @@ async def on_message(message):
                     except OSError:
                         print("{} does not exist...".format(opus_name))
 
-            test_url = "https://www.youtube.com/watch?v=LdPyYze2NIA"
-
             voice = await client.join_voice_channel(message.author.voice.voice_channel)
-            player = await voice.create_ytdl_player(test_url)
+            player = await voice.create_ytdl_player(youtube_url)
             player.start()
 
         elif message.content.lower().startswith("!stop"):
