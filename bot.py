@@ -14,6 +14,9 @@ import var
 
 client = discord.Client()
 
+# Pre-define to use later
+voice, player = None, None
+
 # Quotes
 with open("Text_Resources/quotes.txt", "r") as f:
     block_text = f.read()
@@ -141,6 +144,7 @@ async def on_message(message):
 
 
         elif message.content.lower().startswith("!start"):
+            global voice, player
 
             #if not discord.opus.is_loaded():
             #    discord.opus.load_opus()
@@ -152,10 +156,14 @@ async def on_message(message):
             player.start()
 
         elif message.content.lower().startswith("!stop"):
+            global voice, player
+
             player.stop()
             await voice.disconnect()
 
         elif message.content.lower().startswith("!disconnect"):
+            global voice
+
             await voice.disconnect()
 
 
