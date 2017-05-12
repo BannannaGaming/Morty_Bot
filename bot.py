@@ -137,6 +137,9 @@ async def on_message(message):
         elif message.content.lower().startswith("!help"):
             await client.send_message(message.channel, var.help_message)
 
+
+
+
         elif message.content.lower().startswith("!start"):
             test_url = "https://www.youtube.com/watch?v=LdPyYze2NIA"
 
@@ -148,6 +151,13 @@ async def on_message(message):
 
         elif message.content.lower().startswith("!stop"):
             player.stop()
+            client.disconnect()
+
+        elif message.content.lower().startswith("!disconnect"):
+            client.disconnect()
+
+
+
 
     except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
