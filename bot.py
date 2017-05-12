@@ -161,13 +161,15 @@ async def on_message(message):
         elif message.content.lower().startswith("!add "):
             youtube_url = message.content.split(" ", 1)[1]
             var.youtube_playlist.append(youtube_url)
-            await client.send_message(message.channel, "Added {}\n[playlist not working yet]".format(youtube_url))
+            await client.send_message(message.channel, "Added `{}`\n[playlist not working yet]".format(youtube_url))
 
         elif message.content.lower().startswith("!play "):
             youtube_url = message.content.split(" ", 1)[1]
 
-            if player.yt:
+            try:
                 player.stop()
+            except NameError:
+                pass  # Nothing playing
 
             # OPUS_LIBS = ['libopus-0.dll', 'libopus.so.0', 'libopus.0.dylib', 'libopus.so.1']
             #
