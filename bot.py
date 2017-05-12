@@ -32,6 +32,8 @@ async def on_message(message):
         user = "{0.author.mention}".format(message)  # Get user mention
 
     try:
+        global voice, player
+        
         # Bot owner / admin commands
         if message.content.lower().lower().startswith("!ping") and user in var.owner_approved:
             await client.send_message(message.channel, "pong")
@@ -141,10 +143,8 @@ async def on_message(message):
 
 
         elif message.content.lower().startswith("!start"):
-            global voice, player
-
-            #if not discord.opus.is_loaded():
-            #    discord.opus.load_opus()
+            # if not discord.opus.is_loaded():
+            #     discord.opus.load_opus()
 
             test_url = "https://www.youtube.com/watch?v=LdPyYze2NIA"
 
@@ -153,14 +153,10 @@ async def on_message(message):
             player.start()
 
         elif message.content.lower().startswith("!stop"):
-            global voice, player
-
             player.stop()
             await voice.disconnect()
 
         elif message.content.lower().startswith("!disconnect"):
-            global voice
-
             await voice.disconnect()
 
 
