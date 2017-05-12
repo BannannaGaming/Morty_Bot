@@ -139,8 +139,10 @@ async def on_message(message):
 
         elif message.content.lower().startswith("!start"):
             test_url = "https://www.youtube.com/watch?v=LdPyYze2NIA"
-            channel = client.get_channel(262355614523457537)
+
+            channel = client.get_channel("262355614523457537")
             voice = await client.join_voice_channel(channel)
+
             player = await voice.create_ytdl_player(test_url)
             player.start()
 
