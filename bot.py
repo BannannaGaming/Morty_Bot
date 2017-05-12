@@ -14,9 +14,6 @@ import var
 
 client = discord.Client()
 
-# Pre-define to use later
-voice, player = None, None
-
 # Quotes
 with open("Text_Resources/quotes.txt", "r") as f:
     block_text = f.read()
