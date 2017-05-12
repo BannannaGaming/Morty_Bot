@@ -153,10 +153,10 @@ async def on_message(message):
 
         elif message.content.lower().startswith("!stop"):
             player.stop()
-            await client.disconnect()
+            await voice.disconnect()
 
         elif message.content.lower().startswith("!disconnect"):
-            await client.disconnect()
+            await voice.disconnect()
 
 
 
