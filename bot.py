@@ -21,6 +21,8 @@ with open("Text_Resources/quotes.txt", "r") as f:
 # Insults/Roasts
 with open("Text_Resources/roasts.txt", "r") as f:
     block_text = f.read()
+    print("BLOCK_TEXT")
+    print(block_text)
     insults = block_text.split("\n\n")
 
 @client.event
