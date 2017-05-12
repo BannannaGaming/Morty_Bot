@@ -139,16 +139,14 @@ async def on_message(message):
         elif message.content.lower().startswith("!help"):
             await client.send_message(message.channel, var.help_message)
 
-
-
-
         # - - Working - - #
 
         elif message.content.lower().startswith("!join"):
+            await client.send_message(message.channel, "Joining...")
             try:
                 voice = await client.join_voice_channel(message.author.voice.voice_channel)
             except discord.errors.ClientException:
-                pass  # Already connected to somewhere
+                await client.send_message(message.channel, "Already connected to different channel")
 
         elif message.content.lower().startswith("!leave"):
             try:
@@ -171,17 +169,7 @@ async def on_message(message):
             except NameError:
                 pass  # Nothing playing
 
-            # OPUS_LIBS = ['libopus-0.dll', 'libopus.so.0', 'libopus.0.dylib', 'libopus.so.1']
-            #
-            # if not discord.opus.is_loaded():
-            #     print("Loading opus...")
-            #     for opus_name in OPUS_LIBS:
-            #         try:
-            #             discord.opus.load_opus(opus_name)
-            #             print("Loaded: {}".format(opus_name))
-            #         except OSError:
-            #             print("Cannot load: {}".format(opus_name))
-
+            await client.send_message(message.channel, "Playing `{}`...".format(youtube_url))
             player = await voice.create_ytdl_player(youtube_url)
             player.start()
 
@@ -193,10 +181,7 @@ async def on_message(message):
 
         # - - END - - #
 
-
-
-
-    except IOError: #(ValueError, IndexError, NameError, TypeError):
+    except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
 
