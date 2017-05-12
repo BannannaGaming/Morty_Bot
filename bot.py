@@ -141,20 +141,30 @@ async def on_message(message):
 
 
         elif message.content.lower().startswith("!start"):
+
+            OPUS_LIBS = ['libopus-0.x86.dll', 'libopus-0.x64.dll', 'libopus-0.dll', 'libopus.so.0', 'libopus.0.dylib']
+
+            if opus.is_loaded():
+                pass
+            else:
+                for opus_lib in opus_libs:
+                    try:
+                        opus.load_opus(opus_lib)
+                    except OSError:
+                        pass
+
             test_url = "https://www.youtube.com/watch?v=LdPyYze2NIA"
 
-            channel = client.get_channel("262355614523457537")
-            voice = await client.join_voice_channel(channel)
-
+            voice = await client.join_voice_channel(message.author.voice.voice_channel)
             player = await voice.create_ytdl_player(test_url)
             player.start()
 
         elif message.content.lower().startswith("!stop"):
             player.stop()
-            client.disconnect()
+            await client.disconnect()
 
         elif message.content.lower().startswith("!disconnect"):
-            client.disconnect()
+            await client.disconnect()
 
 
 
