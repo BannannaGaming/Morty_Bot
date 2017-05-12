@@ -141,8 +141,10 @@ async def on_message(message):
 
 
 
+        elif message.content.lower().startswith("!join"):
+            voice = await client.join_voice_channel(message.author.voice.voice_channel)
 
-        elif message.content.lower().startswith("!start "):
+        elif message.content.lower().startswith("!play "):
             youtube_url = message.content.split(" ", 1)[1]
 
             OPUS_LIBS = ['libopus-0.dll', 'libopus.so.0', 'libopus.0.dylib', 'libopus.so.1']
@@ -156,13 +158,11 @@ async def on_message(message):
                     except OSError:
                         print("{} does not exist...".format(opus_name))
 
-            voice = await client.join_voice_channel(message.author.voice.voice_channel)
             player = await voice.create_ytdl_player(youtube_url)
             player.start()
 
         elif message.content.lower().startswith("!stop"):
             player.stop()
-            await voice.disconnect()
 
         elif message.content.lower().startswith("!disconnect"):
             await voice.disconnect()
