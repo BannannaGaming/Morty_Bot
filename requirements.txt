@@ -3,4 +3,4 @@ aiohttp
 wikipedia
 urbandictionary
 PyNaCl
-youtube_dl
+youtube_dl==2017.5.9

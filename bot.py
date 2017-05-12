@@ -168,9 +168,9 @@ async def on_message(message):
                 for opus_name in OPUS_LIBS:
                     try:
                         discord.opus.load_opus(opus_name)
-                        print("Loaded!")
+                        print("Loaded: {}".format(opus_name))
                     except OSError:
-                        print("{} does not exist...".format(opus_name))
+                        print("Cannot load: {}".format(opus_name))
 
             player = await voice.create_ytdl_player(youtube_url)
             player.start()
