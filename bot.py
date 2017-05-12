@@ -7,6 +7,7 @@ Move on and call me an idiot later.
 from datetime import datetime as dt
 import misc_functions
 import discord
+import random
 import var
 
 # Most send's have [:2000] to prevent going over message length limit
@@ -21,8 +22,6 @@ with open("Text_Resources/quotes.txt", "r") as f:
 # Insults/Roasts
 with open("Text_Resources/roasts.txt", "r") as f:
     block_text = f.read()
-    print("BLOCK_TEXT")
-    print(block_text)
     insults = block_text.split("\n\n")
 
 @client.event
@@ -145,7 +144,9 @@ async def on_message(message):
 @client.event
 async def on_ready():
     timestamp = dt.now().strftime("%H:%M")
-    print("Logged in as\n{}\n{}\n@ {}\n------".format(client.user.name, client.user.id, timestamp))
+    print("@ {}".format(timestamp))
+    print("Logged in as\nUsername: {}\nID: {}".format(client.user.name, client.user.id))
+    print("Playing with Rick <3\n------")
     await client.change_presence(game=discord.Game(name="with Rick <3"))
 
 client.run(var.discord_token)
