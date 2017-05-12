@@ -151,8 +151,8 @@ async def on_message(message):
                     try:
                         discord.opus.load_opus(opus_name)
                         print("Loaded!")
-                    except:
-                        logging.warning("{} does not exist...".format(opus_name))
+                    except OSError:
+                        print("{} does not exist...".format(opus_name))
 
             test_url = "https://www.youtube.com/watch?v=LdPyYze2NIA"
 
