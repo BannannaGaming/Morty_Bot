@@ -142,16 +142,8 @@ async def on_message(message):
 
         elif message.content.lower().startswith("!start"):
 
-            OPUS_LIBS = ['libopus-0.x86.dll', 'libopus-0.x64.dll', 'libopus-0.dll', 'libopus.so.0', 'libopus.0.dylib']
-
-            if opus.is_loaded():
-                pass
-            else:
-                for opus_lib in opus_libs:
-                    try:
-                        opus.load_opus(opus_lib)
-                    except OSError:
-                        pass
+            if not discord.opus.is_loaded():
+                discord.opus.load_opus()
 
             test_url = "https://www.youtube.com/watch?v=LdPyYze2NIA"
 
