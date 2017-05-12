@@ -1,3 +1,10 @@
+"""
+var.py
+
+variables which will be unchanged during runtime and
+are used in replies / data requests
+"""
+
 from platform import python_version
 import platform
 import os

@@ -5,13 +5,8 @@ Move on and call me an idiot later.
 """
 
 from datetime import datetime as dt
-import urbandictionary as ud
-import wikipedia
-import datetime
-import aiohttp
+import misc_functions
 import discord
-import random
-import json
 import var
 
 # Most send's have [:2000] to prevent going over message length limit
@@ -19,108 +14,14 @@ import var
 client = discord.Client()
 
 # Quotes
-with open("quotes.txt", "r") as f:
+with open("Text_Resources/quotes.txt", "r") as f:
     block_text = f.read()
     quotes = block_text.split("\n\n")
 
 # Insults/Roasts
-with open("roasts.txt", "r") as f:
+with open("Text_Resources/roasts.txt", "r") as f:
     block_text = f.read()
     insults = block_text.split("\n\n")
-
-async def get_NEOs():
-    current_dates = []
-    now = datetime.datetime.now()
-    today_date = now.strftime("%Y-%m-%d")
-
-    async with aiohttp.get(var.NEO_link.format(today_date, var.nasa_api_key)) as info:
-        NEO_parsed = await info.json()
-
-    for date in NEO_parsed["near_earth_objects"]:
-        current_dates.append(date)
-    if today_date in current_dates:
-        info_date = str(today_date)
-    else:
-        info_date = str(min(current_dates))
-
-    name = NEO_parsed["near_earth_objects"][info_date][0]["name"]
-    diameter_min = NEO_parsed["near_earth_objects"][info_date][0]["estimated_diameter"]["meters"]["estimated_diameter_min"]
-    diameter_max = NEO_parsed["near_earth_objects"][info_date][0]["estimated_diameter"]["meters"]["estimated_diameter_max"]
-    est_diameter = diameter_max - diameter_min
-    haz = NEO_parsed["near_earth_objects"][info_date][0]["is_potentially_hazardous_asteroid"]
-    close_approach_date = NEO_parsed["near_earth_objects"][info_date][0]["close_approach_data"][0]["close_approach_date"]
-    velocity = NEO_parsed["near_earth_objects"][info_date][0]["close_approach_data"][0]["relative_velocity"]["miles_per_hour"]
-    miss_distance = NEO_parsed["near_earth_objects"][info_date][0]["close_approach_data"][0]["miss_distance"]["miles"]
-
-    return var.NEO_text.format(name, est_diameter, haz, close_approach_date, velocity, miss_distance)
-
-
-# I blame Sam
-async def dirty_stuff(search_term):
-    words = []
-    for word in search_term.split(" "):
-        words.append(word)
-    # %20 = URL formatting
-    async with aiohttp.get(var.ph.format("%20".join(words))) as info:
-        ph_link = await info.json()
-
-    try:
-        title = ph_link["videos"][0]["title"]
-        views = ph_link["videos"][0]["views"]
-        rating = ph_link["videos"][0]["rating"]
-        dur = ph_link["videos"][0]["duration"]
-        link = ph_link["videos"][0]["url"]
-        return var.ph_text.format(title, views, rating, dur, link)
-    except (IndexError, KeyError):
-        return "{} cannot be found, you sick fuck".format(word)
-
-
-async def search_wiki(search_req):
-    try:
-        page = wikipedia.page(search_req)
-        wiki_def = var.wiki_msg.format(page.title, page.url, page.content[:1000])
-        return wiki_def
-    except wikipedia.exceptions.PageError:
-        return "That does not match any Wikipedia pages"
-    except wikipedia.exceptions.DisambiguationError:
-        return "Multiple results found, try something else"
-
-
-async def get_urban_def(word):
-    try:
-        defs = ud.define(word)
-        for d in defs[:1]:  # Get first definition from generator
-            ud_name =  d.word
-            ud_definition = d.definition
-            ud_example = d.example
-        return var.ud_msg.format(ud_name, ud_definition, ud_example)
-    except NameError:
-        return "Word not located in urban dictionary"
-
-
-async def get_definition(words):  # Buggy
-    async with aiohttp.get(var.define_word_url.format("%20".join(words))) as info:
-        word_info = await info.json()
-    try:
-        definition = word_info["results"][0]["senses"][0]["definition"]  # Weird format
-        defined = var.define_msg.format(words, definition[0])
-        return defined
-    except IndexError:
-        return "{} cannot be found".format(word)
-
-
-async def big(words):
-    output = []
-    for word in words.split(" "):
-        for letter in word.lower():
-            try:
-                output.append(var.big_dict[letter])
-            except KeyError:
-                output.append(letter)
-        # 2 spaces at request of Sam
-        output.append("  ")
-    return output
-
 
 @client.event
 async def on_message(message):
@@ -131,7 +32,6 @@ async def on_message(message):
 
     try:
         # Bot owner / admin commands
-
         if message.content.lower().lower().startswith("!ping") and user in var.owner_approved:
             await client.send_message(message.channel, "pong")
             print("Ping from server: {}".format(message.server))
@@ -142,7 +42,6 @@ async def on_message(message):
             print("listservers from server: {}".format(message.server))
 
         # Other commands
-
         elif message.content.lower().startswith("!coinflip"):
             flip = random.randint(1, 2)
             if flip == 1:
@@ -192,31 +91,31 @@ async def on_message(message):
 
         elif message.content.lower().startswith("!wiki "):
             search_req = message.content.split(" ", 1)[1]
-            wiki_to_send = await search_wiki(search_req)
+            wiki_to_send = await misc_functions.search_wiki(search_req)
             await client.send_message(message.channel, wiki_to_send)
 
         elif message.content.lower().startswith("!define "):
             word = message.content.split(" ", 1)[1]
-            defined_to_send = await get_definition(word)
+            defined_to_send = await misc_functions.get_definition(word)
             await client.send_message(message.channel, defined_to_send[:2000])
 
         elif message.content.lower().startswith("!ph "):
             search = message.content.split(" ", 1)[1]
-            ph_to_send = await dirty_stuff(search)
+            ph_to_send = await misc_functions.dirty_stuff(search)
             await client.send_message(message.channel, ph_to_send)
 
         elif message.content.lower().startswith("!urban "):
             ud_word = message.content.split(" ", 1)[1]
-            ud_to_send = await get_urban_def(ud_word)
+            ud_to_send = await misc_functions.get_urban_def(ud_word)
             await client.send_message(message.channel, ud_to_send[:2000])
 
         elif message.content.lower().startswith("!neo"):
-            nasa_to_send = await get_NEOs()
+            nasa_to_send = await misc_functions.get_NEOs()
             await client.send_message(message.channel, nasa_to_send)
 
         elif message.content.lower().startswith("!big "):
             words_to_big = message.content.split(" ", 1)[1]
-            bigger_words = await big(" ".join(words_to_big))
+            bigger_words = await misc_functions.big(" ".join(words_to_big))
             big_to_send = "".join(bigger_words)
             await client.send_message(message.channel, big_to_send)
 
@@ -224,11 +123,11 @@ async def on_message(message):
             await client.send_message(message.channel, var.lads_text)
 
         elif message.content.lower().startswith("!holdon"):
-            with open("holdon.png", "rb") as sendfile:
+            with open("Images/holdon.png", "rb") as sendfile:
                 await client.send_file(message.channel, sendfile)
 
         elif message.content.lower().startswith("!roasted"):
-            with open("roastcard.jpg", "rb") as sendfile:
+            with open("Images/roastcard.jpg", "rb") as sendfile:
                 await client.send_file(message.channel, sendfile)
 
         elif message.content.lower().startswith("!info"):
@@ -240,7 +139,6 @@ async def on_message(message):
     except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
-
 
 @client.event
 async def on_ready():
