@@ -147,7 +147,7 @@ async def on_message(message):
 
             if not discord.opus.is_loaded():
                 print("Loading opus...")
-                for opus_name in opus_libs:
+                for opus_name in OPUS_LIBS:
                     try:
                         discord.opus.load_opus(opus_name)
                         print("Loaded!")
