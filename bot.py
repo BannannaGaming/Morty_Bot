@@ -25,13 +25,6 @@ with open("Text_Resources/roasts.txt", "r") as f:
     block_text = f.read()
     insults = block_text.split("\n\n")
 
-async def leave_voice():
-    global voice
-    try:
-        await voice.disconnect()
-    except NameError:
-        pass  # Not connected
-
 @client.event
 async def on_message(message):
     if message.author == client.user:  # Don't reply to self
@@ -42,7 +35,7 @@ async def on_message(message):
     try:
         global voice, player
 
-        print("voice_channel: {}".format(message.author.voice.voice_channel))
+        voice_channel = message.author.voice.voice_channel
 
         # Bot owner / admin commands
         if message.content.lower().lower().startswith("!ping") and user in var.owner_approved:
@@ -155,23 +148,25 @@ async def on_message(message):
         # in different channel
 
         elif message.content.lower().startswith("!waiting"):
-            try:
-                voice = await client.join_voice_channel(message.author.voice.voice_channel)
-            except discord.errors.ClientException:
-                pass  # Already in session
-            try:
-                player.stop()
-            except NameError:
-                pass  # Nothing playing
-            player = voice.create_ffmpeg_player("Sounds/Elevator_Music.mp3", after=leave_voice)
-            player.start()
+            if voice_channel != None:
+                try:
+                    voice = await client.join_voice_channel(voice_channel)
+                except discord.errors.ClientException:
+                    pass  # Already in session
+                try:
+                    player.stop()
+                except NameError:
+                    pass  # Nothing playing
+                player = voice.create_ffmpeg_player("Sounds/Elevator_Music.mp3")
+                player.start()
 
         elif message.content.lower().startswith("!join"):
-            await client.send_message(message.channel, "Joining...")
-            try:
-                voice = await client.join_voice_channel(message.author.voice.voice_channel)
-            except discord.errors.ClientException:
-                await client.send_message(message.channel, "Already connected to different channel")
+            if voice_channel != None:
+                await client.send_message(message.channel, "Joining...")
+                try:
+                    voice = await client.join_voice_channel(voice_channel)
+                except discord.errors.ClientException:
+                    await client.send_message(message.channel, "Already connected to different channel")
 
         elif message.content.lower().startswith("!leave"):
             try:
@@ -180,20 +175,21 @@ async def on_message(message):
                 pass  # Not connected
 
         elif message.content.lower().startswith("!play "):
-            youtube_url = message.content.split(" ", 1)[1]
+            if voice_channel != None:
+                youtube_url = message.content.split(" ", 1)[1]
 
-            try:
-                player.stop()
-            except NameError:
-                pass  # Nothing playing
+                try:
+                    player.stop()
+                except NameError:
+                    pass  # Nothing playing
 
-            await client.send_message(message.channel, "Playing `{}`...".format(youtube_url))
+                await client.send_message(message.channel, "Playing `{}`...".format(youtube_url))
 
-            try:
-                player = await voice.create_ytdl_player(youtube_url)
-                player.start()
-            except youtube_dl.utils.DownloadError:
-                await client.send_message(message.channel, "Not a valid URL")
+                try:
+                    player = await voice.create_ytdl_player(youtube_url)
+                    player.start()
+                except youtube_dl.utils.DownloadError:
+                    await client.send_message(message.channel, "Not a valid URL")
 
         elif message.content.lower().startswith("!stop"):
             try:
