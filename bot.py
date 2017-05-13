@@ -6,6 +6,7 @@ Move on and call me an idiot later.
 
 from datetime import datetime as dt
 import misc_functions
+import youtube_dl
 import discord
 import random
 import var
@@ -33,6 +34,8 @@ async def on_message(message):
 
     try:
         global voice, player
+
+        print("voice_channel: {}".format(message.author.voice.voice_channel))
 
         # Bot owner / admin commands
         if message.content.lower().lower().startswith("!ping") and user in var.owner_approved:
@@ -151,7 +154,7 @@ async def on_message(message):
                 player.stop()
             except NameError:
                 pass  # Nothing playing
-            player = voice.create_ffmpeg_player("Sounds/Elevator_Music.mp3")
+            player = voice.create_ffmpeg_player("Sounds/Elevator_Music.mp3", after=lambda: misc_functions.leave_voice(voice))
             player.start()
 
         elif message.content.lower().startswith("!join"):
@@ -176,8 +179,12 @@ async def on_message(message):
                 pass  # Nothing playing
 
             await client.send_message(message.channel, "Playing `{}`...".format(youtube_url))
-            player = await voice.create_ytdl_player(youtube_url)
-            player.start()
+
+            try:
+                player = await voice.create_ytdl_player(youtube_url)
+                player.start()
+            except youtube_dl.utils.DownloadError:
+                await client.send_message(message.channel, "Not a valid URL")
 
         elif message.content.lower().startswith("!stop"):
             try:
