@@ -25,6 +25,13 @@ with open("Text_Resources/roasts.txt", "r") as f:
     block_text = f.read()
     insults = block_text.split("\n\n")
 
+def leave_voice():
+    global voice
+    try:
+        await voice.disconnect()
+    except NameError:
+        pass  # Not connected
+
 @client.event
 async def on_message(message):
     if message.author == client.user:  # Don't reply to self
@@ -142,6 +149,8 @@ async def on_message(message):
         elif message.content.lower().startswith("!help"):
             await client.send_message(message.channel, var.help_message)
 
+        # - - - Voice stuff - - - #
+
         # TODO: Make !join and !waiting join different channel if called by user
         # in different channel
 
@@ -154,7 +163,7 @@ async def on_message(message):
                 player.stop()
             except NameError:
                 pass  # Nothing playing
-            player = voice.create_ffmpeg_player("Sounds/Elevator_Music.mp3", after=lambda: misc_functions.leave_voice(voice))
+            player = voice.create_ffmpeg_player("Sounds/Elevator_Music.mp3", after=leave_voice)
             player.start()
 
         elif message.content.lower().startswith("!join"):

@@ -98,9 +98,3 @@ async def big(words):
         # 2 spaces at request of Sam
         output.append("  ")
     return output
-
-def leave_voice(voice):
-    try:
-        await voice.disconnect()
-    except NameError:
-        pass  # Not connected
