@@ -37,7 +37,7 @@ async def on_message(message):
         message_content_lower = message.content.lower()
 
     try:
-        global voice, player
+        global voice, player, storage
 
         # Bot owner / admin commands
         if message_content_lower.startswith("!ping") and user in var.owner_approved:
@@ -206,6 +206,15 @@ async def on_message(message):
                 player.stop()
             except NameError:  # Nothing playing
                 pass
+
+        # - - - Test commands - - - #
+
+        elif message_content_lower.startswith("!store ") and user in var.owner_approved:
+            storage = message.content.split(" ", 1)[1]
+            print("{} stored".format(storage))
+
+        elif message_content_lower.startswith("!show") and user in var.owner_approved:
+            print("{} in storage".format(storage))
 
     except concurrent.futures._base.TimeoutError:
         print("concurrent.futures._base.TimeoutError occured")
