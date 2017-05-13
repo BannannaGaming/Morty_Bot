@@ -5,6 +5,7 @@ Extra functions used in bot.py
 """
 
 import urbandictionary as ud
+import youtube_dl
 import wikipedia
 import datetime
 import aiohttp
@@ -98,3 +99,13 @@ async def big(words):
         # 2 spaces at request of Sam
         output.append("  ")
     return output
+
+# Test if URL will work with ytdl stream
+# Code from https://github.com/rg3/youtube-dl/issues/4503#issuecomment-68356094
+async def supported(url):
+    ies = youtube_dl.extractor.gen_extractors()
+    for ie in ies:
+        if ie.suitable(url) and ie.IE_NAME != "generic":
+            # Site has dedicated extractor
+            return True
+    return False
