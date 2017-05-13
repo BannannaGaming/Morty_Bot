@@ -150,7 +150,7 @@ async def on_message(message):
         # in different channel
 
         elif message_content_lower.startswith("!waiting"):
-            if user_voice_channel != None:
+            if user_voice_channel != None or client.is_voice_connected(user_server):
                 try:
                     voice = await client.join_voice_channel(user_voice_channel)
                 except discord.errors.ClientException:
@@ -184,7 +184,7 @@ async def on_message(message):
                 pass  # Not connected
 
         elif message_content_lower.startswith("!play "):
-            if user_voice_channel != None and client.is_voice_connected(user_server):
+            if user_voice_channel != None or client.is_voice_connected(user_server):
                 youtube_url = message.content.split(" ", 1)[1]
                 print("From user {}:\nRequest to play: {}".format(user, youtube_url))
 
@@ -209,7 +209,7 @@ async def on_message(message):
 
     except concurrent.futures._base.TimeoutError:
         print("concurrent.futures._base.TimeoutError occured")
-        await client.send_message(message.channel, "Request timed out :cry:")
+        await client.send_message(message.channel, "Request timed out :cry:\nDoes Morty-bot have permission to enter that voice channel?")
 
     except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
