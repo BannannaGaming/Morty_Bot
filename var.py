@@ -42,7 +42,7 @@ help_message = """
   • `!neo`
     • Get the closest near earth object (uses NASA API)
 
-• **Music**
+• **Music/Sounds**
   • `!join`
     • Joins the voice channel you are in
   • `!leave`
@@ -50,7 +50,7 @@ help_message = """
   • `!play` `youtube url`
     • Start playing youtube video [CRASHES OCCASIONALLY]
   • `!stop`
-    • Stop playing youtube video
+    • Stop playing audio
   • `!waiting`
     • Still waiting...
 
@@ -81,6 +81,11 @@ help_message = """
 • **Bot Owner**
   • `!ping`
   • `!listservers`
+
+• ***COMING SOON***
+  • `!youtube` `search term`
+  • `!imgur` `search term`
+  • Completely replacing mee6 (fuck that guy)
 """
 
 # Urban dictionary message
