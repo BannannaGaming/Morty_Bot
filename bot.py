@@ -165,6 +165,7 @@ async def on_message(message):
         elif message_content_lower.startswith("!join"):
             if user_voice_channel != None:
                 await client.send_message(message.channel, "Joining...")
+                print("From user {}:\nRequest to join {}".format(user, user_voice_channel))
 
                 try:
                     await voice.disconnect()
@@ -185,6 +186,7 @@ async def on_message(message):
         elif message_content_lower.startswith("!play "):
             if user_voice_channel != None and client.is_voice_connected(user_server):
                 youtube_url = message.content.split(" ", 1)[1]
+                print("From user {}:\nRequest to play: {}".format(user, youtube_url))
 
                 try:
                     player.stop()
@@ -205,7 +207,11 @@ async def on_message(message):
             except NameError:  # Nothing playing
                 pass
 
-    except (ValueError, IndexError, NameError, TypeError, concurrent.futures._base.TimeoutError):
+    except concurrent.futures._base.TimeoutError:
+        print("concurrent.futures._base.TimeoutError occured")
+        await client.send_message(message.channel, "Request timed out :cry:")
+
+    except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
         await client.send_message(message.channel, "Something went wrong :cry:")
 
