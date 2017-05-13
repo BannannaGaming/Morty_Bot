@@ -26,7 +26,7 @@ with open("Text_Resources/roasts.txt", "r") as f:
     block_text = f.read()
     insults = block_text.split("\n\n")
 
-def finished_playing():
+def finished_playing(message):
     global voice, player
     if var.youtube_playlist:
         var.youtube_playlist.pop(0)
@@ -40,7 +40,6 @@ def finished_playing():
 
         youtube_url = var.youtube_playlist[0]
 
-        await client.send_message(message.channel, "Playing `{}`...".format(youtube_url))
         player = await voice.create_ytdl_player(youtube_url)
         player.start()
 
