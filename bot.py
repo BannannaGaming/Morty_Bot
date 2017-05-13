@@ -25,7 +25,7 @@ with open("Text_Resources/roasts.txt", "r") as f:
     block_text = f.read()
     insults = block_text.split("\n\n")
 
-def leave_voice():
+async def leave_voice():
     global voice
     try:
         await voice.disconnect()
