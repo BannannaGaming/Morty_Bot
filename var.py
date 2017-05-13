@@ -51,6 +51,8 @@ help_message = """
     • Start playing youtube video [CRASHES OCCASIONALLY]
   • `!stop`
     • Stop playing youtube video
+  • `!waiting`
+    • Still waiting...
 
 • **Random Selection**
   • `!coinflip`

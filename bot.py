@@ -139,7 +139,20 @@ async def on_message(message):
         elif message.content.lower().startswith("!help"):
             await client.send_message(message.channel, var.help_message)
 
-        # - - Working - - #
+        # TODO: Make !join and !waiting join different channel if called by user
+        # in different channel
+
+        elif message.content.lower().startswith("!waiting"):
+            try:
+                voice = await client.join_voice_channel(message.author.voice.voice_channel)
+            except discord.errors.ClientException:
+                pass  # Already in session
+            try:
+                player.stop()
+            except NameError:
+                pass  # Nothing playing
+            player = voice.create_ffmpeg_player("Sounds/Elevator_Music.mp3")
+            player.start()
 
         elif message.content.lower().startswith("!join"):
             await client.send_message(message.channel, "Joining...")
@@ -153,13 +166,6 @@ async def on_message(message):
                 await voice.disconnect()
             except NameError:
                 pass  # Not connected
-
-        # - - Experimental - -#
-
-        elif message.content.lower().startswith("!add "):
-            youtube_url = message.content.split(" ", 1)[1]
-            var.youtube_playlist.append(youtube_url)
-            await client.send_message(message.channel, "Added `{}`\n[playlist not working yet]".format(youtube_url))
 
         elif message.content.lower().startswith("!play "):
             youtube_url = message.content.split(" ", 1)[1]
@@ -178,8 +184,6 @@ async def on_message(message):
                 player.stop()
             except NameError:  # Nothing playing
                 pass
-
-        # - - END - - #
 
     except (ValueError, IndexError, NameError, TypeError):
         print("Something went wrong :(")
