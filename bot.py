@@ -224,7 +224,7 @@ async def on_message(message):
 @client.event
 async def on_ready():
     timestamp = dt.now().strftime("%H:%M")
-    print("@ {}".format(timestamp))
+    print("@ {} (GMT-1)".format(timestamp))
     print("Logged in as\nUsername: {}\nID: {}".format(client.user.name, client.user.id))
     print("Playing with Rick <3\n------")
     await client.change_presence(game=discord.Game(name="with Rick <3"))
