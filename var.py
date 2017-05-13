@@ -43,14 +43,17 @@ help_message = """
     • Get the closest near earth object (uses NASA API)
 
 • **Music/Sounds**
+  • ***note***: playlist not automatic yet, `!playnext` must be called after a song finishes
   • `!join`
     • Joins the voice channel you are in
   • `!leave`
     • Leaves whatever channel it is in
-  • `!play` `youtube url`
-    • Start playing youtube video [CRASHES OCCASIONALLY]
+  • `!playnext`
+    • Start playing playlist / skip to next song [CRASHES OCCASIONALLY]
   • `!stop`
     • Stop playing audio
+  • `!add` `youtube url`
+    • Add a youtube url to the playlist [playlist erased occasionally]
   • `!waiting`
     • Still waiting...
 

@@ -146,6 +146,30 @@ async def on_message(message):
 
         # - - - Voice stuff - - - #
 
+        elif message_content_lower.startswith("!add "):
+            url = message.content.split(" ", 1)[1]
+            url_supported = await misc_functions.supported(url)
+            if url_supported:
+                var.youtube_playlist.append(url)
+                await client.send_message(message.channel, "Added")
+            else:
+                await client.send_message(message.channel, "Invalid URL")
+
+        elif message_content_lower.startswith("!playnext"):
+            if client.is_voice_connected(user_server) and var.youtube_playlist:
+                youtube_url = var.youtube_playlist.pop(0)
+                await client.send_message(message.channel, "Playing `{}`...".format(youtube_url))
+                try:
+                    player.stop()
+                except NameError:
+                    pass  # Nothing playing
+
+                try:
+                    player = await voice.create_ytdl_player(youtube_url)
+                    player.start()
+                except youtube_dl.utils.DownloadError:
+                    await client.send_message(message.channel, "Invalid URL")
+
         elif message_content_lower.startswith("!waiting"):
             if user_voice_channel != None or client.is_voice_connected(user_server):
                 try:
@@ -180,23 +204,23 @@ async def on_message(message):
             except NameError:
                 pass  # Not connected
 
-        elif message_content_lower.startswith("!play "):
-            if user_voice_channel != None or client.is_voice_connected(user_server):
-                youtube_url = message.content.split(" ", 1)[1]
-                print("From user {}:\nRequest to play: {}".format(user, youtube_url))
-
-                try:
-                    player.stop()
-                except NameError:
-                    pass  # Nothing playing
-
-                await client.send_message(message.channel, "Playing `{}`...".format(youtube_url))
-
-                try:
-                    player = await voice.create_ytdl_player(youtube_url)
-                    player.start()
-                except youtube_dl.utils.DownloadError:
-                    await client.send_message(message.channel, "Not a valid URL")
+        # elif message_content_lower.startswith("!play"):
+        #     if client.is_voice_connected(user_server) and var.youtube_playlist:
+        #         youtube_url = var.youtube_playlist.pop(0)
+        #         print("From user {}:\nRequest to play start audio stream".format(user))
+        #
+        #         try:
+        #             player.stop()
+        #         except NameError:
+        #             pass  # Nothing playing
+        #
+        #         await client.send_message(message.channel, "Playing `{}`...".format(youtube_url))
+        #
+        #         try:
+        #             player = await voice.create_ytdl_player(youtube_url)
+        #             player.start()
+        #         except youtube_dl.utils.DownloadError:
+        #             await client.send_message(message.channel, "Invalid URL")
 
         elif message_content_lower.startswith("!stop"):
             try:
