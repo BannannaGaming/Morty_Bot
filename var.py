@@ -42,6 +42,16 @@ help_message = """
   • `!neo`
     • Get the closest near earth object (uses NASA API)
 
+• **Music**
+  • `!join`
+    • Joins the voice channel you are in
+  • `!leave`
+    • Leaves whatever channel it is in
+  • `!play` `youtube url`
+    • Start playing youtube video [CRASHES OCCASIONALLY]
+  • `!stop`
+    • Stop playing youtube video
+
 • **Random Selection**
   • `!coinflip`
     • Heads or tails!
