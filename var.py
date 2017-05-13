@@ -54,6 +54,8 @@ help_message = """
     • Stop playing audio
   • `!add` `youtube url`
     • Add a youtube url to the playlist [playlist erased occasionally]
+  • `!playlist`
+    • Show what is currently in the playlist
   • `!waiting`
     • Still waiting...
 

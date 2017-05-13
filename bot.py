@@ -170,6 +170,12 @@ async def on_message(message):
                 except youtube_dl.utils.DownloadError:
                     await client.send_message(message.channel, "Invalid URL")
 
+        elif message_content_lower.startswith("!playlist"):
+            if var.youtube_playlist:
+                await client.send_message(message.channel, "\n".join(var.youtube_playlist))
+            else:
+                await client.send_message(message.channel, "Playlist is empty")
+
         elif message_content_lower.startswith("!waiting"):
             if user_voice_channel != None or client.is_voice_connected(user_server):
                 try:
