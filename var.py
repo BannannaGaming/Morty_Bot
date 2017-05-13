@@ -109,7 +109,6 @@ Python Version : {}
 Platform       : {}
 - - - -  --  - - - -
 ```
-Add me to another server : http://bit.ly/Morty-bot
 Test me on my own server : https://www.discord.gg/kDE7HJy
 My source code : https://github.com/thatguywiththatname/Morty_Bot
 """.format(python_version(),
