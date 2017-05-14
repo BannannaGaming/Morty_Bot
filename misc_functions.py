@@ -115,4 +115,4 @@ async def supported(url):
 
 async def log(message, log_type):
     log_type(message)
-    print("{} : {}".format(str(log_type), message))
+    print(message)
