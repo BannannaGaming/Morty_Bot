@@ -1,7 +1,5 @@
 """
-This code sucks, you know it and I know it.
-Async is hard...
-Move on and call me an idiot later.
+The brains of Morty-bot
 """
 
 from datetime import datetime as dt
@@ -42,12 +40,12 @@ async def on_message(message):
         # Bot owner / admin commands
         if message_content_lower.startswith("!ping") and user in var.owner_approved:
             await client.send_message(message.channel, "pong")
-            print("Ping from server: {}".format(user_server))
+            await misc_functions.log("Ping from server: {}".format(user_server), logging.info)
 
         elif message_content_lower.startswith("!listservers") and user in var.owner_approved:
             servers = [server.name for server in client.servers]
             await client.send_message(message.channel, ", ".join(servers))
-            print("listservers from server: {}".format(user_server))
+            await misc_functions.log("listservers from server: {}".format(user_server), logging.info)
 
         # Other commands
         elif message_content_lower.startswith("!coinflip"):
@@ -192,7 +190,7 @@ async def on_message(message):
         elif message_content_lower.startswith("!join"):
             if user_voice_channel != None:
                 await client.send_message(message.channel, "Joining...")
-                print("From user {}:\nRequest to join {}".format(user, user_voice_channel))
+                await misc_functions.log("From user {}:\nRequest to join {}".format(user, user_voice_channel), logging.info)
 
                 try:
                     await voice.disconnect()
@@ -210,24 +208,6 @@ async def on_message(message):
             except NameError:
                 pass  # Not connected
 
-        # elif message_content_lower.startswith("!play"):
-        #     if client.is_voice_connected(user_server) and var.youtube_playlist:
-        #         youtube_url = var.youtube_playlist.pop(0)
-        #         print("From user {}:\nRequest to play start audio stream".format(user))
-        #
-        #         try:
-        #             player.stop()
-        #         except NameError:
-        #             pass  # Nothing playing
-        #
-        #         await client.send_message(message.channel, "Playing `{}`...".format(youtube_url))
-        #
-        #         try:
-        #             player = await voice.create_ytdl_player(youtube_url)
-        #             player.start()
-        #         except youtube_dl.utils.DownloadError:
-        #             await client.send_message(message.channel, "Invalid URL")
-
         elif message_content_lower.startswith("!stop"):
             try:
                 player.stop()
@@ -238,25 +218,25 @@ async def on_message(message):
 
         elif message_content_lower.startswith("!store ") and user in var.owner_approved:
             storage = message.content.split(" ", 1)[1]
-            print("{} stored".format(storage))
+            await misc_functions.log("{} stored".format(storage), logging.info)
 
         elif message_content_lower.startswith("!show") and user in var.owner_approved:
-            print("{} in storage".format(storage))
+            await misc_functions.log("{} in storage".format(storage), logging.info)
 
     except concurrent.futures._base.TimeoutError:
-        print("concurrent.futures._base.TimeoutError occured")
+        await misc_functions.log("concurrent.futures._base.TimeoutError occured", logging.warning)
         await client.send_message(message.channel, "Request timed out :cry:\nDoes Morty-bot have permission to enter that voice channel?")
 
     except (ValueError, IndexError, NameError, TypeError):
-        print("Something went wrong :(")
+        await misc_functions.log("ValueError, IndexError, NameError or TypeError occured", logging.warning)
         await client.send_message(message.channel, "Something went wrong :cry:")
 
 @client.event
 async def on_ready():
     timestamp = dt.now().strftime("%H:%M")
-    print("@ {} (GMT-1)".format(timestamp))
-    print("Logged in as\nUsername: {}\nID: {}".format(client.user.name, client.user.id))
-    print("Playing with Rick <3\n------")
+    await misc_functions.log("@ {} (GMT-1)".format(timestamp), logging.info)
+    await misc_functions.log("Logged in as\nUsername: {}\nID: {}".format(client.user.name, client.user.id), logging.info)
+    await misc_functions.log("Playing with Rick <3\n------", logging.info)
     await client.change_presence(game=discord.Game(name="with Rick <3"))
 
 client.run(var.discord_token)

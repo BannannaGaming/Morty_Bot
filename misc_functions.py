@@ -8,9 +8,12 @@ import urbandictionary as ud
 import youtube_dl
 import wikipedia
 import datetime
+import logging
 import aiohttp
 import json
 import var
+
+logging.basicConfig(filename="Morty-bot.log", format="%(asctime)s | %(levelname)s: %(message)s", datefmt="%Y/%m/%d %H:%M:%S", level=logging.DEBUG)
 
 async def get_NEOs():
     current_dates = []
@@ -109,3 +112,7 @@ async def supported(url):
             # Site has dedicated extractor
             return True
     return False
+
+async def log(message, log_type):
+    log_type(message)
+    print("{} : {}".format(str(log_type), message))
