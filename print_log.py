@@ -1,3 +1,7 @@
+"""
+Quick tool for printing the logfile
+"""
+
 try:
     with open("Morty-bot.log", "r") as f:
         print(f.read())
