@@ -7,6 +7,7 @@ import misc_functions
 import youtube_dl
 import concurrent
 import discord
+import logging
 import random
 import var
 
