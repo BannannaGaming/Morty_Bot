@@ -56,8 +56,10 @@ help_message = """
     • Add a youtube url to the playlist [playlist erased occasionally]
   • `!playlist`
     • Show what is currently in the playlist
+  • `!chill`
+    • Add some randomally chosen background music to the playlist
   • `!waiting`
-    • Still waiting...
+    • Add some music for waiting to the playlist 
 
 • **Random Selection**
   • `!coinflip`

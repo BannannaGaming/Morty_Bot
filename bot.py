@@ -15,6 +15,8 @@ import var
 
 client = discord.Client()
 
+logging.basicConfig(filename="Morty-bot.log", format="%(asctime)s | %(levelname)s: %(message)s", datefmt="%Y/%m/%d %H:%M:%S", level=logging.DEBUG)
+
 # Quotes
 with open("Text_Resources/quotes.txt", "r") as f:
     block_text = f.read()
@@ -24,6 +26,11 @@ with open("Text_Resources/quotes.txt", "r") as f:
 with open("Text_Resources/roasts.txt", "r") as f:
     block_text = f.read()
     insults = block_text.split("\n\n")
+
+# Chill music
+with open("Text_Resources/background_music.txt", "r") as f:
+    block_text = f.read()
+    chill_music = block_text.split("\n\n")
 
 @client.event
 async def on_message(message):
@@ -154,6 +161,16 @@ async def on_message(message):
             else:
                 await client.send_message(message.channel, "Invalid URL")
 
+        elif message_content_lower.startswith("!chill"):
+            choice = random.randint(0, len(chill_music))
+            music_url = chill_music[choice]
+            url_supported = await misc_functions.supported(music_url)
+            if url_supported:
+                var.youtube_playlist.append(music_url)
+                await client.send_message(message.channel, "Smooth tunes added")
+            else:
+                raise ValueError
+
         elif message_content_lower.startswith("!playnext"):
             if client.is_voice_connected(user_server) and var.youtube_playlist:
                 youtube_url = var.youtube_playlist.pop(0)
@@ -176,11 +193,7 @@ async def on_message(message):
                 await client.send_message(message.channel, "Playlist is empty")
 
         elif message_content_lower.startswith("!waiting"):
-            if user_voice_channel != None or client.is_voice_connected(user_server):
-                try:
-                    voice = await client.join_voice_channel(user_voice_channel)
-                except discord.errors.ClientException:
-                    pass  # Already in session
+            if client.is_voice_connected(user_server):
                 try:
                     player.stop()
                 except NameError:

@@ -13,8 +13,6 @@ import aiohttp
 import json
 import var
 
-logging.basicConfig(filename="Morty-bot.log", format="%(asctime)s | %(levelname)s: %(message)s", datefmt="%Y/%m/%d %H:%M:%S", level=logging.DEBUG)
-
 async def get_NEOs():
     current_dates = []
     now = datetime.datetime.now()
